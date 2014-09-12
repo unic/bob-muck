@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<PowerShellTaskFactoryAssemblyFile>$(MSBuildThisFileDirectory)\MSBuild.ExtensionPack.TaskFactory.PowerShell.dll</PowerShellTaskFactoryAssemblyFile>
+	</PropertyGroup>
+	<UsingTask AssemblyFile="$(PowerShellTaskFactoryAssemblyFile)" TaskFactory="PowershellTaskFactory" TaskName="GetBobSetting">
+		<ParameterGroup>
+			<Key ParameterType="System.String" Required="true"/>
+			<ConfigDirectory ParameterType="System.String" Required="true"/>
+			<Value Output="true"/>
+		</ParameterGroup>
+		<Task>
+			<![CDATA[
+				$files = @("$ConfigDirectory\Bob.config", "$ConfigDirectory\Bob.user.config")
+				foreach($file in $files) {
+				    if(Test-Path $file) {
+				        $xml = [xml](Get-Content $file )
+				        $nsMgr = New-Object  System.Xml.XmlNamespaceManager ($xml.NameTable);
+				        $nsMgr.AddNamespace("bob", "http://www.unic.com/Bob");
+				        $nodes = $xml.SelectNodes("/bob:Configuration/bob:$Key", $nsMgr);
+				        
+				        if($nodes.Count -gt 0) {
+				            $value = $nodes[0].InnerText
+				        }
+				    }
+				}
+
+			]]>
+		</Task>
+	</UsingTask>
+	<PropertyGroup>
+		<WebPublishMethod>FileSystem</WebPublishMethod>
+		<LastUsedBuildConfiguration>Debug</LastUsedBuildConfiguration>
+		<LastUsedPlatform>Any CPU</LastUsedPlatform>
+		<SiteUrlToLaunchAfterPublish/>
+		<LaunchSiteAfterPublish>True</LaunchSiteAfterPublish>
+		<ExcludeApp_Data>False</ExcludeApp_Data>
+		<DeleteExistingFiles>False</DeleteExistingFiles>
+
+		<BobConfigPath>$(MSBuildProjectDirectory)\App_Config</BobConfigPath>
+	</PropertyGroup>
+</Project>
