@@ -11,7 +11,7 @@
 		</ParameterGroup>
 		<Task>
 			<![CDATA[
-				$files = @("$ConfigDirectory\Bob.config", "$ConfigDirectory\Bob.user.config")
+				$files = @("$ConfigDirectory\Bob.config", "$ConfigDirectory\Bob.config.user")
 				foreach($file in $files) {
 				    if(Test-Path $file) {
 				        $xml = [xml](Get-Content $file )
@@ -40,10 +40,7 @@
 	</PropertyGroup>
 	<PropertyGroup>
 		<BobConfigPath>$(MSBuildProjectDirectory)\App_Config</BobConfigPath>
+      	<MuckEnvironment>local</MuckEnvironment>
+      	<DeployOnBuild Condition="'$(DeployOnBuild)' == ''">True</DeployOnBuild>
 	</PropertyGroup>
-	
-    <PropertyGroup>
-      <MuckEnvironment>local</MuckEnvironment>
-    </PropertyGroup>
-
 </Project>

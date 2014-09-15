@@ -38,16 +38,6 @@
       PipelineCollectFilesPhase;
     </CollectFilesForMuckTransformWebConfigsDependsOn>
   </PropertyGroup>
-  <PropertyGroup>
-    <MuckBaseFile>base</MuckBaseFile>
-   <!-- <MuckTransformFileName Condition="'$(MuckTransformFileName)'=='' And '$(MuckEnvironment)' != '' ">$(_ProjectConfigFilePrefix).base$(_ProjectConfigFileExtension)</MuckTransformFileName>-->
-    <!--<MuckTransformFileName>$(_ProjectConfigFilePrefix).$(MuckEnvironment)$(_ProjectConfigFileExtension)</MuckTransformFileName>-->
-  </PropertyGroup>
-
-  <ItemGroup>
-    <MuckTransformFileNames Include="$(_ProjectConfigFilePrefix).$(MuckBaseFile)$(_ProjectConfigFileExtension)"></MuckTransformFileNames>
-  <MuckTransformFileNames Include="$(_ProjectConfigFilePrefix).$(MuckEnvironment)$(_ProjectConfigFileExtension)"></MuckTransformFileNames>
-  </ItemGroup>
 
   <Target Condition="'$(CollectFilesForMuckTransformWebConfigs)' != 'false' And '$(MuckEnvironment)' != ''" DependsOnTargets="$(CollectFilesForMuckTransformWebConfigsDependsOn)" Name="CollectFilesForMuckTransformWebConfigs">
     <!-- Gather Sources, Transforms, and Destinations for the TransformXml task -->
@@ -125,10 +115,10 @@
     <MuckTransformWebConfigCoreDependsOn>PreMuckTransformWebConfig;
     </MuckTransformWebConfigCoreDependsOn>
   </PropertyGroup>
-  <Target Condition="'@(MuckWebConfigsToTransform)' != '' And $(MuckTransformWebConfigEnabled)" DependsOnTargets="$(MuckTransformWebConfigCoreDependsOn)"  Name="MuckTransformWebConfigCore" >
+  <Target Condition="'@(MuckWebConfigsToTransform)' != '' And $(MuckTransformWebConfigEnabled)" DependsOnTargets="$(MuckTransformWebConfigCoreDependsOn)"  Name="MuckTransformWebConfigCore" Outputs="$(_MuckWebConfigTransformOutput)" Inputs="@(MuckWebConfigsToTransform);%(TransformFile)" >
     <!--Outputs="$(_MuckWebConfigTransformOutput)"  Inputs="@(MuckWebConfigsToTransform);%(TransformFile)" -->
     <!-- Execute transformations -->
-    
+
     <Copy SourceFiles="%(MuckWebConfigsToTransform.Identity)" DestinationFiles="%(MuckWebConfigsToTransform.TemporarayFile)" />
 
     <TransformXml Condition="!%(Exclude)" Destination="%(MuckWebConfigsToTransform.TemporarayFile)" Source="%(MuckWebConfigsToTransform.TemporarayFile)" SourceRootPath="$(WebPublishPipelineSourceRootDirectory)" StackTrace="$(MuckTransformWebConfigStackTraceEnabled)" Transform="%(MuckWebConfigsToTransform.TransformFile)" TransformRootPath="$(WebPublishPipelineTransformRootDirectory)"/>

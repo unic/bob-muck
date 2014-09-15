@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <BuildDependsOn> 
-      $(BuildDependsOn);
-      MuckLoadSettings; 
-      WebFileSystemPublish;
-    </BuildDependsOn>
-  </PropertyGroup>
-   <Target Name="MuckLoadSettings">
+    <PropertyGroup>
+        <BuildDependsOn Condition="$(DeployOnBuild)"> 
+          $(BuildDependsOn);
+          MuckLoadSettings; 
+          WebFileSystemPublish;
+        </BuildDependsOn>
+    </PropertyGroup>
+    <Target Name="MuckLoadSettings">
         <GetBobSetting Key="WebsiteCodeName" ConfigDirectory="$(BobConfigPath)">
             <Output TaskParameter="Value" PropertyName="WebsiteCodeName" />
         </GetBobSetting>
@@ -17,13 +17,20 @@
         <GetBobSetting Key="WebFolderName" ConfigDirectory="$(BobConfigPath)">
             <Output TaskParameter="Value" PropertyName="WebFolderName" />
         </GetBobSetting>
-
-		<PropertyGroup>
-			<publishUrl>$(GlobalWebPath)\$(WebsiteCodeName)\$(WebFolderName)</publishUrl>
-		</PropertyGroup>
-
-
+        <GetBobSetting Key="MuckRole" ConfigDirectory="$(BobConfigPath)">
+            <Output TaskParameter="Value" PropertyName="MuckRole" />
+        </GetBobSetting>
+        <PropertyGroup>
+            <publishUrl>$(GlobalWebPath)\$(WebsiteCodeName)\$(WebFolderName)</publishUrl>
+            <MuckBaseFile>base</MuckBaseFile>
+        </PropertyGroup>
+        <ItemGroup>
+            <MuckTransformFileNames Include="$(_ProjectConfigFilePrefix).$(MuckBaseFile)$(_ProjectConfigFileExtension)"></MuckTransformFileNames>
+            <MuckTransformFileNames Include="$(_ProjectConfigFilePrefix).$(MuckRole)$(_ProjectConfigFileExtension)"></MuckTransformFileNames>
+            <MuckTransformFileNames Include="$(_ProjectConfigFilePrefix).$(MuckEnvironment)$(_ProjectConfigFileExtension)"></MuckTransformFileNames>
+            <MuckTransformFileNames Include="$(_ProjectConfigFilePrefix).$(MuckEnvironment).$(MuckRole)$(_ProjectConfigFileExtension)"></MuckTransformFileNames>
+        </ItemGroup>
     </Target>
-      <Import Project="$(MSBuildThisFileDirectory)\XmlTransform.targets" />
+    <Import Project="$(MSBuildThisFileDirectory)\XmlTransform.targets" />
 
 </Project>
