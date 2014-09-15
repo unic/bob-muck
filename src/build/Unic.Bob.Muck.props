@@ -28,6 +28,7 @@
 			]]>
 		</Task>
 	</UsingTask>
+	<!-- Web Deploy Properties-->
 	<PropertyGroup>
 		<WebPublishMethod>FileSystem</WebPublishMethod>
 		<LastUsedBuildConfiguration>Debug</LastUsedBuildConfiguration>
@@ -36,7 +37,13 @@
 		<LaunchSiteAfterPublish>True</LaunchSiteAfterPublish>
 		<ExcludeApp_Data>False</ExcludeApp_Data>
 		<DeleteExistingFiles>False</DeleteExistingFiles>
-
+	</PropertyGroup>
+	<PropertyGroup>
 		<BobConfigPath>$(MSBuildProjectDirectory)\App_Config</BobConfigPath>
 	</PropertyGroup>
+	
+    <PropertyGroup>
+      <MuckEnvironment>local</MuckEnvironment>
+    </PropertyGroup>
+
 </Project>

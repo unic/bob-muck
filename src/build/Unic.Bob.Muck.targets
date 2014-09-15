@@ -22,5 +22,8 @@
 			<publishUrl>$(GlobalWebPath)\$(WebsiteCodeName)\$(WebFolderName)</publishUrl>
 		</PropertyGroup>
 
+
     </Target>
+      <Import Project="$(MSBuildThisFileDirectory)\XmlTransform.targets" />
+
 </Project>

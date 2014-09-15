@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--********************************************************************-->
+  <!--Target MuckTransformWebConfig -->
+  <!--********************************************************************-->
+  <PropertyGroup>
+    <MuckTransformWebConfigBeforeTargets>
+      $(MuckTransformWebConfigBeforeTargets);
+      MarkWebConfigAssistFilesAsExclude;
+    </MuckTransformWebConfigBeforeTargets>
+    <MuckTransformWebConfigAfterTargets>
+      $(MuckTransformWebConfigAfterTargets);
+      TransformWebConfig;
+    </MuckTransformWebConfigAfterTargets>
+    <MuckTransformWebConfigDependsOn>
+      $(OnBeforeMuckTransformWebConfig);
+      $(MuckTransformWebConfigDependsOn);
+      PreMuckTransformWebConfig;
+      MuckTransformWebConfigCore;
+      PostMuckTransformWebConfig;
+    </MuckTransformWebConfigDependsOn>
+
+    <MuckTransformWebConfigEnabled>True</MuckTransformWebConfigEnabled>
+    <MuckTransformWebConfigIntermediateOutput Condition="'$(MuckTransformWebConfigIntermediateOutput)'==''">MuckTransformWebConfig</MuckTransformWebConfigIntermediateOutput>
+    <MuckTransformWebConfigIntermediateLocation Condition="'$(MuckTransformWebConfigIntermediateLocation)'==''">$(_WPPDefaultIntermediateOutputPath)$(MuckTransformWebConfigIntermediateOutput)</MuckTransformWebConfigIntermediateLocation>
+
+    <MuckTransformWebConfigIntermediateTempLocation>$(MuckTransformWebConfigIntermediateLocation)\temp</MuckTransformWebConfigIntermediateTempLocation>
+  </PropertyGroup>
+  <Target AfterTargets="$(MuckTransformWebConfigAfterTargets)" BeforeTargets="$(MuckTransformWebConfigBeforeTargets)" Condition="'$(MuckTransformWebConfig)' != 'false'  And '$(MuckEnvironment)' != ''" DependsOnTargets="$(MuckTransformWebConfigDependsOn)" Name="MuckTransformWebConfig">
+    <CallTarget RunEachTargetSeparately="False" Targets="$(OnAfterMuckTransformWebConfig)"/>
+  </Target>
+  <!--********************************************************************-->
+  <!--Target CollectFilesForMuckTransformWebConfigs -->
+  <!--********************************************************************-->
+  <PropertyGroup>
+    <CollectFilesForMuckTransformWebConfigsDependsOn>$(OnBeforeCollectFilesForMuckTransformWebConfigs);
+      $(CollectFilesForMuckTransformWebConfigsDependsOn);
+      PipelineCollectFilesPhase;
+    </CollectFilesForMuckTransformWebConfigsDependsOn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <MuckBaseFile>base</MuckBaseFile>
+   <!-- <MuckTransformFileName Condition="'$(MuckTransformFileName)'=='' And '$(MuckEnvironment)' != '' ">$(_ProjectConfigFilePrefix).base$(_ProjectConfigFileExtension)</MuckTransformFileName>-->
+    <!--<MuckTransformFileName>$(_ProjectConfigFilePrefix).$(MuckEnvironment)$(_ProjectConfigFileExtension)</MuckTransformFileName>-->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <MuckTransformFileNames Include="$(_ProjectConfigFilePrefix).$(MuckBaseFile)$(_ProjectConfigFileExtension)"></MuckTransformFileNames>
+  <MuckTransformFileNames Include="$(_ProjectConfigFilePrefix).$(MuckEnvironment)$(_ProjectConfigFileExtension)"></MuckTransformFileNames>
+  </ItemGroup>
+
+  <Target Condition="'$(CollectFilesForMuckTransformWebConfigs)' != 'false' And '$(MuckEnvironment)' != ''" DependsOnTargets="$(CollectFilesForMuckTransformWebConfigsDependsOn)" Name="CollectFilesForMuckTransformWebConfigs">
+    <!-- Gather Sources, Transforms, and Destinations for the TransformXml task -->
+ 
+      <Message Text="%(MuckTransformFileNames.Identity)" />
+    <ItemGroup>
+      <MuckWebConfigsToTransformFiles Condition="'%(FilesForPackagingFromProject.Filename)%(FilesForPackagingFromProject.Extension)'=='$(ProjectConfigFileName)'" Include="@(FilesForPackagingFromProject)">
+        <TransformFileDirectory>$(WebPublishPipelineProjectDirectory)\$([System.IO.Path]::GetDirectoryName($([System.String]::new(%(DestinationRelativePath)))))\</TransformFileDirectory>
+        <TransformOriginalFolder>$(MuckTransformWebConfigIntermediateLocation)\original</TransformOriginalFolder>
+        <TransformFileFolder>$(MuckTransformWebConfigIntermediateLocation)\assist</TransformFileFolder>
+        <TransformOutputFile>$(MuckTransformWebConfigIntermediateLocation)\transformed\%(DestinationRelativePath)</TransformOutputFile>
+        <TransformScope>$([System.IO.Path]::GetFullPath($(WPPAllFilesInSingleFolder)\%(DestinationRelativePath)))</TransformScope>
+        <TemporarayFile>$(MuckTransformWebConfigIntermediateTempLocation)\%(DestinationRelativePath)</TemporarayFile>
+      </MuckWebConfigsToTransformFiles>
+      <MuckWebConfigsToTransformTemp Include="@(MuckWebConfigsToTransformFiles)">
+        <TransformFileName>%(MuckTransformFileNames.Identity)</TransformFileName>
+      </MuckWebConfigsToTransformTemp>
+
+      <MuckWebConfigsToTransform Include="@(MuckWebConfigsToTransformTemp)">
+        <TransformFile>%(TransformFileDirectory)\%(TransformFileName)</TransformFile>
+      </MuckWebConfigsToTransform>
+
+      <_MuckWebConfigsToTransformOuputs Include="@(MuckWebConfigsToTransform-&gt;'%(TransformOutputFile)')"/>
+    </ItemGroup>
+      <Message Text="@(MuckWebConfigsToTransform) %(Identity) %(TransformFile)" />
+    <CallTarget RunEachTargetSeparately="False" Targets="$(OnAfterCollectFilesForMuckTransformWebConfigs)"/>
+  </Target>
+  <!--********************************************************************-->
+  <!--Target PreMuckTransformWebConfig -->
+  <!--********************************************************************-->
+  <PropertyGroup>
+    <PreMuckTransformWebConfigDependsOn>CollectFilesForMuckTransformWebConfigs;
+    </PreMuckTransformWebConfigDependsOn>
+  </PropertyGroup>
+  <Target DependsOnTargets="$(PreMuckTransformWebConfigDependsOn)" Name="PreMuckTransformWebConfig">
+    <ItemGroup>
+      <!-- Gather all the web.config which doesn't have the transform file -->
+      <_TempNoTrnasformFileForMuckWebConfigsToTransform Condition="!Exists(%(TransformFile))" Include="@(MuckWebConfigsToTransform)"/>
+      <!-- Remove all the web.config doesn't have transform file -->
+      <MuckWebConfigsToTransform Remove="@(_TempNoTrnasformFileForMuckWebConfigsToTransform)"/>
+    </ItemGroup>
+    <PropertyGroup>
+      <_MuckWebConfigsToTransformOuputsDirectories>@(_MuckWebConfigsToTransformOuputs-&gt;'%(RootDir)%(Directory)')</_MuckWebConfigsToTransformOuputsDirectories>
+    </PropertyGroup>
+    <ItemGroup>
+      <_MuckWebConfigsToTransformOuputsDirectories Include="$(_MuckWebConfigsToTransformOuputsDirectories)"/>
+    </ItemGroup>
+    <!-- Debugging messages -->
+    <PropertyGroup>
+      <_MessageArguments>@(MuckWebConfigsToTransform-&gt;'%(DestinationRelativePath)', ', ')</_MessageArguments>
+    </PropertyGroup>
+    <GetPublishingLocalizedString ArgumentCount="1" Arguments="$(_MessageArguments)" Condition="'$(_MessageArguments)'!=''" ID="PublishLocalizedString_FoundApplicationConfigForTransformation" LogType="Message"/>
+    <!-- Make sure required directories exist -->
+    <MakeDir Condition="!Exists(%(Identity))" Directories="@(_MuckWebConfigsToTransformOuputsDirectories)"/>
+    <PropertyGroup>
+      <_MuckWebConfigTransformOutput>@(MuckWebConfigsToTransform-&gt;'%(TransformOutputFile)')</_MuckWebConfigTransformOutput>
+    </PropertyGroup>
+    <WriteLinesToFile Condition="$(EnablePackageProcessLoggingAndAssert) And ('@(MuckWebConfigsToTransform)'!='') And !%(Exclude)" Encoding="utf-8" File="$(PackageLogDir)\PreMuckTransformWebConfig.Log" Lines="@(MuckWebConfigsToTransform-&gt;'             Transforming  input: %(Identity)                        with:  %(TransformFile)                       output: %(TransformOutputFile)                       ')" Overwrite="True"/>
+    <WriteLinesToFile Condition="$(EnablePackageProcessLoggingAndAssert)" Encoding="utf-8" File="$(PackageLogDir)\PreMuckTransformWebConfig.Log" Lines="_MuckWebConfigTransformOutput: $(_MuckWebConfigTransformOutput)" Overwrite="False"/>
+    <!-- Copy the original web.config -->
+    <CopyPipelineFiles Condition="'@(MuckWebConfigsToTransform)' != ''" DeleteItemsMarkAsExcludeTrue="True" PipelineItems="@(MuckWebConfigsToTransform)" SkipMetadataExcludeTrueItems="True" SourceDirectory="$(WebPublishPipelineProjectDirectory)" TargetDirectory="%(TransformOriginalFolder)" UpdateItemSpec="False">
+      <Output ItemName="_UpdatedMuckWebConfigsToTransform" TaskParameter="UpdatedPipelineItems"/>
+    </CopyPipelineFiles>
+    <!-- Delete those web.config have been updated if existed-->
+    <Delete Files="@(_UpdatedMuckWebConfigsToTransform-&gt;'%(TransformOutputFile)')"/>
+    <!--Copy the TransformFile-->
+    <CopyPipelineFiles Condition="'@(MuckWebConfigsToTransform)' != ''" DeleteItemsMarkAsExcludeTrue="True" PipelineItems="@(MuckWebConfigsToTransform-&gt;'%(TransformFile)')" SkipMetadataExcludeTrueItems="True" SourceDirectory="$(WebPublishPipelineProjectDirectory)" TargetDirectory="%(TransformFileFolder)" UpdateItemSpec="False">
+      <Output ItemName="_UpdatedMuckWebConfigsTransformFile" TaskParameter="UpdatedPipelineItems"/>
+    </CopyPipelineFiles>
+    <!-- Delete those web.config have been updated if existed-->
+    <Delete Files="@(_UpdatedMuckWebConfigsTransformFile-&gt;'%(TransformOutputFile)')"/>
+  </Target>
+  <!--Target MuckTransformWebConfigCore -->
+  <PropertyGroup>
+    <MuckTransformWebConfigCoreDependsOn>PreMuckTransformWebConfig;
+    </MuckTransformWebConfigCoreDependsOn>
+  </PropertyGroup>
+  <Target Condition="'@(MuckWebConfigsToTransform)' != '' And $(MuckTransformWebConfigEnabled)" DependsOnTargets="$(MuckTransformWebConfigCoreDependsOn)"  Name="MuckTransformWebConfigCore" >
+    <!--Outputs="$(_MuckWebConfigTransformOutput)"  Inputs="@(MuckWebConfigsToTransform);%(TransformFile)" -->
+    <!-- Execute transformations -->
+    
+    <Copy SourceFiles="%(MuckWebConfigsToTransform.Identity)" DestinationFiles="%(MuckWebConfigsToTransform.TemporarayFile)" />
+
+    <TransformXml Condition="!%(Exclude)" Destination="%(MuckWebConfigsToTransform.TemporarayFile)" Source="%(MuckWebConfigsToTransform.TemporarayFile)" SourceRootPath="$(WebPublishPipelineSourceRootDirectory)" StackTrace="$(MuckTransformWebConfigStackTraceEnabled)" Transform="%(MuckWebConfigsToTransform.TransformFile)" TransformRootPath="$(WebPublishPipelineTransformRootDirectory)"/>
+    <Copy SourceFiles="%(MuckWebConfigsToTransform.TemporarayFile)" DestinationFiles="%(MuckWebConfigsToTransform.TransformOutputFile)" />
+  </Target>
+
+<Target Name="PostMuckTransformWebConfig"
+          DependsOnTargets="$(PostMuckTransformWebConfigDependsOn)">
+
+    <ItemGroup>
+      <!--Remove untransformed Web.configs from the pipeline-->
+      <FilesForPackagingFromProject Remove="@(MuckWebConfigsToTransform)" Condition="'@(MuckWebConfigsToTransform)'!='' And !%(MuckWebConfigsToTransform.Exclude) And Exists(%(MuckWebConfigsToTransform.TransformOutputFile))"/>
+      <!--Add the transformed Web.configs at the new loction to the pipeline-->
+      <FilesForPackagingFromProject Include="@(MuckWebConfigsToTransform->'%(TransformOutputFile)')" Condition="'@(MuckWebConfigsToTransform)'!='' And !%(MuckWebConfigsToTransform.Exclude) And Exists(%(MuckWebConfigsToTransform.TransformOutputFile))"/>
+    </ItemGroup>
+
+
+    <GetPublishingLocalizedString
+       Importance="High"
+       Condition="'@(MuckWebConfigsToTransform)'!='' And !%(MuckWebConfigsToTransform.Exclude) And Exists(%(MuckWebConfigsToTransform.TransformOutputFile))"
+       ID="PublishLocalizedString_TransformConfigUsingTransformFileToTransformOutputFile"
+       ArgumentCount="3"
+       Arguments="@(MuckWebConfigsToTransform->'%(Identity)');%(TransformFile); %(TransformOutputFile)"
+       LogType="Message" />
+    <!-- "Transformed @(MuckWebConfigsToTransform) using %(TransformFile) into %(TransformOutputFile)" />-->
+
+
+
+    <MakeDir Condition="$(EnablePackageProcessLoggingAndAssert) And !Exists('$(PackageLogDir)')"
+             Directories="$(PackageLogDir)" />
+    <WriteLinesToFile Condition="$(EnablePackageProcessLoggingAndAssert)"
+                      Encoding="utf-8"
+                      File="$(PackageLogDir)\AfterMuckTransformWebConfig.txt"
+                      Lines="@(FilesForPackagingFromProject->'
+                      From:%(Identity) 
+                      DestinationRelativePath:%(DestinationRelativePath) 
+                      Exclude:%(Exclude) 
+                      FromTarget:%(FromTarget) 
+                      Category:%(Category)
+                      ProjectFileType:%(ProjectFileType)')" Overwrite="True" />
+  </Target>
+
+
+  <PropertyGroup>
+    <OnAfterTransformWebConfig>
+      $(OnAfterTransformWebConfig);
+      MuckTransformWebConfig;
+    </OnAfterTransformWebConfig>
+  </PropertyGroup>
+</Project>
