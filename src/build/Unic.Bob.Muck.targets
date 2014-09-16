@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <BuildDependsOn Condition="$(DeployOnBuild)"> 
+        <BuildDependsOn Condition="'$(BuildingInsideVisualStudio)' == 'True'">
           $(BuildDependsOn);
-          MuckLoadSettings; 
+          MuckLoadSettings;  
           WebFileSystemPublish;
         </BuildDependsOn>
     </PropertyGroup>
@@ -23,13 +23,16 @@
         <PropertyGroup>
             <publishUrl>$(GlobalWebPath)\$(WebsiteCodeName)\$(WebFolderName)</publishUrl>
             <MuckBaseFile>base</MuckBaseFile>
+            <MuckPerformXmlTransform>True</MuckPerformXmlTransform>
         </PropertyGroup>
         <ItemGroup>
             <MuckTransformFileNames Include="$(_ProjectConfigFilePrefix).$(MuckBaseFile)$(_ProjectConfigFileExtension)"></MuckTransformFileNames>
             <MuckTransformFileNames Include="$(_ProjectConfigFilePrefix).$(MuckRole)$(_ProjectConfigFileExtension)"></MuckTransformFileNames>
             <MuckTransformFileNames Include="$(_ProjectConfigFilePrefix).$(MuckEnvironment)$(_ProjectConfigFileExtension)"></MuckTransformFileNames>
             <MuckTransformFileNames Include="$(_ProjectConfigFilePrefix).$(MuckEnvironment).$(MuckRole)$(_ProjectConfigFileExtension)"></MuckTransformFileNames>
+
         </ItemGroup>
+        <Message Text="@(MuckTransformFileNames)" Importance="High"/>
     </Target>
     <Import Project="$(MSBuildThisFileDirectory)\XmlTransform.targets" />
 

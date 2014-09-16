@@ -41,6 +41,6 @@
 	<PropertyGroup>
 		<BobConfigPath>$(MSBuildProjectDirectory)\App_Config</BobConfigPath>
       	<MuckEnvironment>local</MuckEnvironment>
-      	<DeployOnBuild Condition="'$(DeployOnBuild)' == ''">True</DeployOnBuild>
+      	<DeployOnBuild Condition="'$(BuildingInsideVisualStudio)' == 'True'">True</DeployOnBuild>
 	</PropertyGroup>
 </Project>
