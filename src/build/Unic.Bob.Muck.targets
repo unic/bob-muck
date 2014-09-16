@@ -21,6 +21,11 @@
         <GetBobSetting Key="MuckRole" ConfigDirectory="$(BobConfigPath)">
             <Output TaskParameter="Value" PropertyName="MuckRole" />
         </GetBobSetting>
+        <GetBobSetting Key="MuckKeepAppConfigIncludes" ConfigDirectory="$(BobConfigPath)">
+            <Output TaskParameter="Value" PropertyName="MuckKeepAppConfigIncludes" />
+        </GetBobSetting>
+
+
         <PropertyGroup>
             <publishUrl>$(GlobalWebPath)\$(WebsiteCodeName)\$(WebFolderName)</publishUrl>
             <MuckBaseFile>base</MuckBaseFile>
@@ -33,10 +38,11 @@
             <MuckTransformFileNames Include="$(_ProjectConfigFilePrefix).$(MuckEnvironment).$(MuckRole)$(_ProjectConfigFileExtension)"></MuckTransformFileNames>
 
         </ItemGroup>
-        <Message Text="@(MuckTransformFileNames)" Importance="High"/>
+
     </Target>
     <Target Name ="MuckRemoveEnvironmentFiles">
-        <RemoveEnvironmentFiles ModuleDirectory="$(MSBuildThisFileDirectory)" Environment="$(MuckEnvironment)" Role="$(MuckRole)" WebRoot="$(publishUrl)" />
+
+        <RemoveEnvironmentFiles ModuleDirectory="$(MSBuildThisFileDirectory)" Environment="$(MuckEnvironment)" Role="$(MuckRole)" WebRoot="$(publishUrl)" KeepFilter="$(MuckKeepAppConfigIncludes)" />
     </Target>
     <Import Project="$(MSBuildThisFileDirectory)\XmlTransform.targets" />
 </Project>

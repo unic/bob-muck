@@ -34,6 +34,7 @@
 			<Environment ParameterType="System.String" Required="true"/>
 			<Role ParameterType="System.String" Required="true"/>
 			<WebRoot ParameterType="System.String" Required="true"/>
+			<KeepFilter ParameterType="System.String" Required="true" />
 		</ParameterGroup>
 		<Task>
 			<![CDATA[
@@ -41,7 +42,8 @@
 					throw "Could not find Muck PowerShell module"
 				}
 				Import-Module $ModuleDirectory\Muck
-				Remove-WrongEnvironment -WebRoot $WebRoot -Environment $Environment -Role $Role
+				$files = Remove-WrongEnvironment -WebRoot $WebRoot -Environment $Environment -Role $Role -KeepFilter $KeepFilter
+			  $files | % {$log.LogMessage([Microsoft.Build.Framework.MessageImportance]"High", "Deleted folder $_")}
 			]]>
 		</Task>
 	</UsingTask>

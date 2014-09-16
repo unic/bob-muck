@@ -7,22 +7,37 @@ function Remove-WrongEnvironment
       [Parameter(Mandatory=$true)]
       [string] $Environment ,
       [Parameter(Mandatory=$true)]
-      [string] $Role
+      [string] $Role,
+      [Parameter(Mandatory=$true)]
+      [string] $KeepFilter
   )
   Process
   {
     $rootDir = "$WebRoot\App_Config\Include"
     $itemsToKeep = @()
-    $itemsToKeep += (ls "$rootDir\*_base\").FullName
-    $itemsToKeep += (ls "$rootDir\*_hardening\").FullName
-    $itemsToKeep += (ls "$rootDir\*_$Environment\").FullName
-    $itemsToKeep += (ls "$rootDir\*_$Role\").FullName
-    $itemsToKeep += (ls "$rootDir\*_$Environment.$Role\").FullName
+    foreach($filterPart in $KeepFilter.Split(';')) {
+      $filterPart = $filterPart.Trim()
+      $filterPart = $filterPart.Replace('$Environment', $Environment)
+      $filterPart = $filterPart.Replace('$Role', $Role)
+      foreach($folder in (ls $rootDir -recurse | Where {$_.PSIsContainer})) {
+        if($folder.FullName.Replace($rootDir, "") -like $filterPart) {
+          $itemsToKeep += $folder.FullName
+        }
+      }
+      #$itemsToKeep += (ls "$rootDir\$filterPart\" ).FullName
+    }
+    foreach($item in (ls "$rootDir" -Recurse | Where {$_.PSIsContainer -eq $true})) {
+      $delete = $true;
+      foreach($keep in $itemsToKeep) {
+        if($keep.StartsWith($item.FullName)) {
+          $delete = $false
+          break;
+        }
+      }
 
-    foreach($item in (ls $rootDir | Where {$_.PSIsContainer -eq $true})) {
-
-      if(-not ($itemsToKeep.Contains($item.FullName))) {
-        rm $item.FullName -Recurse
+      if($delete -and (Test-Path $item.FullName)) {
+          $item.FullName
+          rm $item.FullName -Recurse
       }
     }
   }
