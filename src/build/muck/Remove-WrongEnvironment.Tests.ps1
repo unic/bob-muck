@@ -1,0 +1,54 @@
+$here = Split-Path -Parent $MyInvocation.MyCommand.Path
+$sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path).Replace(".Tests.", ".")
+. "$here\$sut"
+
+
+Describe "Remove-WrongEnvironment" {
+  Context "Roles" {
+    mkdir "TestDrive:\App_Config\Include\10_delivery"
+    mkdir "TestDrive:\App_Config\Include\10_author"
+
+    Remove-WrongEnvironment  -WebRoot "TestDrive:\" -Environment "dummy" -Role author
+
+    It "Should have deleted delivery"  {
+      Test-Path "TestDrive:\App_Config\Include\10_delivery" | Should Be $false
+    }
+
+    It "Should not have deleted author" {
+      Test-Path "TestDrive:\App_Config\Include\10_author" | Should Be $true
+    }
+  }
+
+  Context "Environments" {
+    mkdir "TestDrive:\App_Config\Include\20_local"
+    mkdir "TestDrive:\App_Config\Include\20_int"
+
+
+    Remove-WrongEnvironment  -WebRoot "TestDrive:\" -Environment "int" -Role "dummy"
+
+
+    It "Should have deleted local" {
+      Test-Path "TestDrive:\App_Config\Include\20_local" | Should Be $false
+    }
+    It "Should not have deleted int" {
+      Test-Path "TestDrive:\App_Config\Include\20_int" | Should Be $true
+    }
+  }
+
+  Context "Base and hardneing" {
+    mkdir "TestDrive:\App_Config\Include\30_base"
+    mkdir "TestDrive:\App_Config\Include\40_hardening"
+
+
+    Remove-WrongEnvironment  -WebRoot "TestDrive:\" -Environment "int" -Role "dummy"
+
+
+    It "Should not have deleted base" {
+      Test-Path "TestDrive:\App_Config\Include\30_base" | Should Be $true
+    }
+    It "Should not have deleted hardening" {
+      Test-Path "TestDrive:\App_Config\Include\40_hardening" | Should Be $true
+    }
+  }
+
+}

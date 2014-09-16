@@ -18,13 +18,30 @@
 				        $nsMgr = New-Object  System.Xml.XmlNamespaceManager ($xml.NameTable);
 				        $nsMgr.AddNamespace("bob", "http://www.unic.com/Bob");
 				        $nodes = $xml.SelectNodes("/bob:Configuration/bob:$Key", $nsMgr);
-				        
+
 				        if($nodes.Count -gt 0) {
 				            $value = $nodes[0].InnerText
 				        }
 				    }
 				}
 
+			]]>
+		</Task>
+	</UsingTask>
+	<UsingTask AssemblyFile="$(PowerShellTaskFactoryAssemblyFile)" TaskFactory="PowershellTaskFactory" TaskName="RemoveEnvironmentFiles">
+		<ParameterGroup>
+			<ModuleDirectory ParameterType="System.String" Required="true"/>
+			<Environment ParameterType="System.String" Required="true"/>
+			<Role ParameterType="System.String" Required="true"/>
+			<WebRoot ParameterType="System.String" Required="true"/>
+		</ParameterGroup>
+		<Task>
+			<![CDATA[
+				if(-not (Test-Path $ModuleDirectory\Muck)) {
+					throw "Could not find Muck PowerShell module"
+				}
+				Import-Module $ModuleDirectory\Muck
+				Remove-WrongEnvironment -WebRoot $WebRoot -Environment $Environment -Role $Role
 			]]>
 		</Task>
 	</UsingTask>

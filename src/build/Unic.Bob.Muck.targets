@@ -3,8 +3,9 @@
     <PropertyGroup>
         <BuildDependsOn Condition="'$(BuildingInsideVisualStudio)' == 'True'">
           $(BuildDependsOn);
-          MuckLoadSettings;  
+          MuckLoadSettings;
           WebFileSystemPublish;
+          MuckRemoveEnvironmentFiles;
         </BuildDependsOn>
     </PropertyGroup>
     <Target Name="MuckLoadSettings">
@@ -34,6 +35,8 @@
         </ItemGroup>
         <Message Text="@(MuckTransformFileNames)" Importance="High"/>
     </Target>
+    <Target Name ="MuckRemoveEnvironmentFiles">
+        <RemoveEnvironmentFiles ModuleDirectory="$(MSBuildThisFileDirectory)" Environment="$(MuckEnvironment)" Role="$(MuckRole)" WebRoot="$(publishUrl)" />
+    </Target>
     <Import Project="$(MSBuildThisFileDirectory)\XmlTransform.targets" />
-
 </Project>
