@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+ 	<UsingTask AssemblyFile="$(MSBuildThisFileDirectory)MSBuild.ExtensionPack.Iis7.dll" TaskName="MSBuild.ExtensionPack.Web.Iis7AppPool"/>
 	<PropertyGroup>
 		<PowerShellTaskFactoryAssemblyFile>$(MSBuildThisFileDirectory)\MSBuild.ExtensionPack.TaskFactory.PowerShell.dll</PowerShellTaskFactoryAssemblyFile>
 	</PropertyGroup>
@@ -24,7 +25,6 @@
 				        }
 				    }
 				}
-
 			]]>
 		</Task>
 	</UsingTask>
@@ -47,6 +47,7 @@
 			]]>
 		</Task>
 	</UsingTask>
+
 	<!-- Web Deploy Properties-->
 	<PropertyGroup>
 		<WebPublishMethod>FileSystem</WebPublishMethod>
