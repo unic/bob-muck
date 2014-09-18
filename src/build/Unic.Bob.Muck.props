@@ -42,7 +42,7 @@
 					throw "Could not find Muck PowerShell module"
 				}
 				Import-Module $ModuleDirectory\Muck
-				$files = Remove-WrongEnvironment -WebRoot $WebRoot -Environment $Environment -Role $Role -KeepFilter $KeepFilter
+				$files = Remove-WrongEnvironmentConfigs -WebRoot $WebRoot -Environment $Environment -Role $Role -KeepFilter $KeepFilter
 			  $files | % {$log.LogMessage([Microsoft.Build.Framework.MessageImportance]"High", "Deleted folder $_")}
 			]]>
 		</Task>
@@ -57,10 +57,13 @@
 		<LaunchSiteAfterPublish>True</LaunchSiteAfterPublish>
 		<ExcludeApp_Data>False</ExcludeApp_Data>
 		<DeleteExistingFiles>False</DeleteExistingFiles>
+    <DeployOnBuild Condition="'$(BuildingInsideVisualStudio)' == 'True'">True</DeployOnBuild>
 	</PropertyGroup>
+  <!-- Muck static properties -->
 	<PropertyGroup>
 		<BobConfigPath>$(MSBuildProjectDirectory)\App_Config</BobConfigPath>
-      	<MuckEnvironment>local</MuckEnvironment>
-      	<DeployOnBuild Condition="'$(BuildingInsideVisualStudio)' == 'True'">True</DeployOnBuild>
+    	<MuckEnvironment>local</MuckEnvironment>
+      <MuckBaseWebConfigIdentifier>base</MuckBaseWebConfigIdentifier>
+      <MuckPerformXmlTransform>True</MuckPerformXmlTransform>
 	</PropertyGroup>
 </Project>

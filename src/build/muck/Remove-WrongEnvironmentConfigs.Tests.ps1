@@ -11,12 +11,12 @@ $filters = @'
   *_$Environment.$Role
 '@
 
-Describe "Remove-WrongEnvironment" {
+Describe "Remove-WrongEnvironmentConfigs" {
   Context "Roles" {
     mkdir "TestDrive:\App_Config\Include\10_delivery"
     mkdir "TestDrive:\App_Config\Include\10_author"
 
-    Remove-WrongEnvironment  -WebRoot "TestDrive:\" -Environment "dummy" -Role author -KeepFilter $filters
+    Remove-WrongEnvironmentConfigs  -WebRoot "TestDrive:\" -Environment "dummy" -Role author -KeepFilter $filters
 
     It "Should have deleted delivery"  {
       Test-Path "TestDrive:\App_Config\Include\10_delivery" | Should Be $false
@@ -32,7 +32,7 @@ Describe "Remove-WrongEnvironment" {
     mkdir "TestDrive:\App_Config\Include\20_int"
 
 
-    Remove-WrongEnvironment  -WebRoot "TestDrive:\" -Environment "int" -Role "dummy" -KeepFilter $filters
+    Remove-WrongEnvironmentConfigs  -WebRoot "TestDrive:\" -Environment "int" -Role "dummy" -KeepFilter $filters
 
 
     It "Should have deleted local" {
@@ -48,7 +48,7 @@ Describe "Remove-WrongEnvironment" {
     mkdir "TestDrive:\App_Config\Include\40_hardening"
 
 
-    Remove-WrongEnvironment  -WebRoot "TestDrive:\" -Environment "int" -Role "dummy" -KeepFilter $filters
+    Remove-WrongEnvironmentConfigs  -WebRoot "TestDrive:\" -Environment "int" -Role "dummy" -KeepFilter $filters
 
 
     It "Should not have deleted base" {
@@ -65,7 +65,7 @@ Describe "Remove-WrongEnvironment" {
     mkdir "TestDrive:\App_COnfig\Include\20"
     mkdir "TestDrive:\App_COnfig\Include\30\dummy"
 
-    Remove-WrongEnvironment  -KeepFilter "*base"  -WebRoot "TestDrive:\" -Environment "int" -Role "dummy"
+    Remove-WrongEnvironmentConfigs  -KeepFilter "*base"  -WebRoot "TestDrive:\" -Environment "int" -Role "dummy"
 
     It "Should not have deleted folders" {
       Test-Path "TestDrive:\App_Config\Include\10\base" | Should Be $true

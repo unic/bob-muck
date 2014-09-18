@@ -1,4 +1,4 @@
-function Remove-WrongEnvironment
+function Remove-WrongEnvironmentConfigs
 {
   [CmdletBinding()]
   Param(
@@ -24,7 +24,6 @@ function Remove-WrongEnvironment
           $itemsToKeep += $folder.FullName
         }
       }
-      #$itemsToKeep += (ls "$rootDir\$filterPart\" ).FullName
     }
     foreach($item in (ls "$rootDir" -Recurse | Where {$_.PSIsContainer -eq $true})) {
       $delete = $true;

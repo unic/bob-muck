@@ -33,11 +33,11 @@
 
         <PropertyGroup>
             <publishUrl>$(GlobalWebPath)\$(WebsiteCodeName)\$(WebFolderName)</publishUrl>
-            <MuckBaseFile>base</MuckBaseFile>
+            <MuckBaseWebConfigIdentifier>base</MuckBaseWebConfigIdentifier>
             <MuckPerformXmlTransform>True</MuckPerformXmlTransform>
         </PropertyGroup>
         <ItemGroup>
-            <MuckTransformFileNames Include="$(_ProjectConfigFilePrefix).$(MuckBaseFile)$(_ProjectConfigFileExtension)"></MuckTransformFileNames>
+            <MuckTransformFileNames Include="$(_ProjectConfigFilePrefix).$(MuckBaseWebConfigIdentifier)$(_ProjectConfigFileExtension)"></MuckTransformFileNames>
             <MuckTransformFileNames Include="$(_ProjectConfigFilePrefix).$(MuckRole)$(_ProjectConfigFileExtension)"></MuckTransformFileNames>
             <MuckTransformFileNames Include="$(_ProjectConfigFilePrefix).$(MuckEnvironment)$(_ProjectConfigFileExtension)"></MuckTransformFileNames>
             <MuckTransformFileNames Include="$(_ProjectConfigFilePrefix).$(MuckEnvironment).$(MuckRole)$(_ProjectConfigFileExtension)"></MuckTransformFileNames>
