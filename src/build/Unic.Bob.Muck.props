@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+ 	<UsingTask AssemblyFile="$(MSBuildThisFileDirectory)MSBuild.ExtensionPack.Iis7.dll" TaskName="MSBuild.ExtensionPack.Web.Iis7AppPool"/>
+	<PropertyGroup>
+		<PowerShellTaskFactoryAssemblyFile>$(MSBuildThisFileDirectory)\MSBuild.ExtensionPack.TaskFactory.PowerShell.dll</PowerShellTaskFactoryAssemblyFile>
+	</PropertyGroup>
+	<UsingTask AssemblyFile="$(PowerShellTaskFactoryAssemblyFile)" TaskFactory="PowershellTaskFactory" TaskName="GetBobSetting">
+		<ParameterGroup>
+			<Key ParameterType="System.String" Required="true"/>
+			<ConfigDirectory ParameterType="System.String" Required="true"/>
+			<Value Output="true"/>
+		</ParameterGroup>
+		<Task>
+			<![CDATA[
+				$files = @("$ConfigDirectory\Bob.config", "$ConfigDirectory\Bob.config.user")
+				foreach($file in $files) {
+				    if(Test-Path $file) {
+				        $xml = [xml](Get-Content $file )
+				        $nsMgr = New-Object  System.Xml.XmlNamespaceManager ($xml.NameTable);
+				        $nsMgr.AddNamespace("bob", "http://www.unic.com/Bob");
+				        $nodes = $xml.SelectNodes("/bob:Configuration/bob:$Key", $nsMgr);
+
+				        if($nodes.Count -gt 0) {
+				            $value = $nodes[0].InnerText
+				        }
+				    }
+				}
+			]]>
+		</Task>
+	</UsingTask>
+	<UsingTask AssemblyFile="$(PowerShellTaskFactoryAssemblyFile)" TaskFactory="PowershellTaskFactory" TaskName="RemoveEnvironmentFiles">
+		<ParameterGroup>
+			<ModuleDirectory ParameterType="System.String" Required="true"/>
+			<Environment ParameterType="System.String" Required="true"/>
+			<Role ParameterType="System.String" Required="true"/>
+			<WebRoot ParameterType="System.String" Required="true"/>
+			<KeepFilter ParameterType="System.String" Required="true" />
+		</ParameterGroup>
+		<Task>
+			<![CDATA[
+				if(-not (Test-Path $ModuleDirectory\Muck)) {
+					throw "Could not find Muck PowerShell module"
+				}
+				Import-Module $ModuleDirectory\Muck
+				$files = Remove-WrongEnvironmentConfigs -WebRoot $WebRoot -Environment $Environment -Role $Role -KeepFilter $KeepFilter
+			  $files | % {$log.LogMessage([Microsoft.Build.Framework.MessageImportance]"High", "Deleted folder $_")}
+			]]>
+		</Task>
+	</UsingTask>
+
+	<!-- Web Deploy Properties-->
+	<PropertyGroup>
+		<WebPublishMethod>FileSystem</WebPublishMethod>
+		<LastUsedBuildConfiguration>Debug</LastUsedBuildConfiguration>
+		<LastUsedPlatform>Any CPU</LastUsedPlatform>
+		<SiteUrlToLaunchAfterPublish/>
+		<LaunchSiteAfterPublish>True</LaunchSiteAfterPublish>
+		<ExcludeApp_Data>False</ExcludeApp_Data>
+		<DeleteExistingFiles>False</DeleteExistingFiles>
+    <DeployOnBuild Condition="'$(BuildingInsideVisualStudio)' == 'True'">True</DeployOnBuild>
+	</PropertyGroup>
+  <!-- Muck static properties -->
+	<PropertyGroup>
+		<BobConfigPath>$(MSBuildProjectDirectory)\App_Config</BobConfigPath>
+    	<MuckEnvironment>local</MuckEnvironment>
+      <MuckBaseWebConfigIdentifier>base</MuckBaseWebConfigIdentifier>
+      <MuckPerformXmlTransform>True</MuckPerformXmlTransform>
+	</PropertyGroup>
+</Project>

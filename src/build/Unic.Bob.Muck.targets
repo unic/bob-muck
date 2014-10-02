@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <BuildDependsOn Condition="'$(BuildingInsideVisualStudio)' == 'True'">
+          $(BuildDependsOn);
+          MuckLoadSettings;
+          WebFileSystemPublish;
+          MuckRemoveEnvironmentFiles;
+          MuckRecyleAppPool;
+        </BuildDependsOn>
+    </PropertyGroup>
+    <Target Name="MuckLoadSettings">
+        <GetBobSetting Key="WebsiteCodeName" ConfigDirectory="$(BobConfigPath)">
+            <Output TaskParameter="Value" PropertyName="WebsiteCodeName" />
+        </GetBobSetting>
+        <GetBobSetting Key="GlobalWebPath" ConfigDirectory="$(BobConfigPath)">
+            <Output TaskParameter="Value" PropertyName="GlobalWebPath" />
+        </GetBobSetting>
+        <GetBobSetting Key="WebFolderName" ConfigDirectory="$(BobConfigPath)">
+            <Output TaskParameter="Value" PropertyName="WebFolderName" />
+        </GetBobSetting>
+        <GetBobSetting Key="ActiveRole" ConfigDirectory="$(BobConfigPath)">
+            <Output TaskParameter="Value" PropertyName="MuckRole" />
+        </GetBobSetting>
+        <GetBobSetting Key="KeepAppConfigIncludes" ConfigDirectory="$(BobConfigPath)">
+            <Output TaskParameter="Value" PropertyName="MuckKeepAppConfigIncludes" />
+        </GetBobSetting>
+        <GetBobSetting Key="MuckRecyleAppPool" ConfigDirectory="$(BobConfigPath)">
+            <Output TaskParameter="Value" PropertyName="MuckRecyleAppPool" />
+        </GetBobSetting>
+
+
+
+        <PropertyGroup>
+            <publishUrl>$(GlobalWebPath)\$(WebsiteCodeName)\$(WebFolderName)</publishUrl>
+            <MuckBaseWebConfigIdentifier>base</MuckBaseWebConfigIdentifier>
+            <MuckPerformXmlTransform>True</MuckPerformXmlTransform>
+        </PropertyGroup>
+        <ItemGroup>
+            <MuckTransformFileNames Include="$(_ProjectConfigFilePrefix).$(MuckBaseWebConfigIdentifier)$(_ProjectConfigFileExtension)"></MuckTransformFileNames>
+            <MuckTransformFileNames Include="$(_ProjectConfigFilePrefix).$(MuckRole)$(_ProjectConfigFileExtension)"></MuckTransformFileNames>
+            <MuckTransformFileNames Include="$(_ProjectConfigFilePrefix).$(MuckEnvironment)$(_ProjectConfigFileExtension)"></MuckTransformFileNames>
+            <MuckTransformFileNames Include="$(_ProjectConfigFilePrefix).$(MuckEnvironment).$(MuckRole)$(_ProjectConfigFileExtension)"></MuckTransformFileNames>
+
+        </ItemGroup>
+
+    </Target>
+    <Target Name ="MuckRemoveEnvironmentFiles">
+        <RemoveEnvironmentFiles ModuleDirectory="$(MSBuildThisFileDirectory)" Environment="$(MuckEnvironment)" Role="$(MuckRole)" WebRoot="$(publishUrl)" KeepFilter="$(MuckKeepAppConfigIncludes)" />
+    </Target>
+    <Target Name="MuckRecyleAppPool" Condition="'$(MuckRecyleAppPool)' == 'true'">
+         <MSBuild.ExtensionPack.Web.Iis7AppPool TaskAction="Recycle" Name="$(WebsiteCodeName)" />
+        <Message Text="adsf" />
+    </Target>
+    <Import Project="$(MSBuildThisFileDirectory)\XmlTransform.targets" />
+</Project>
