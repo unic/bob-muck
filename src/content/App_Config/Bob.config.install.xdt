@@ -5,7 +5,7 @@
   <WebsiteCodeName xdt:Transform="InsertIfMissing"></WebsiteCodeName>
   <WebFolderName xdt:Transform="InsertIfMissing">Web</WebFolderName>
   <GlobalWebPath xdt:Transform="InsertIfMissing">D:\web</GlobalWebPath>
-    <KeepAppConfigIncludes xdt:Transform="InsertIfMissing">
+  <KeepAppConfigIncludes xdt:Transform="InsertIfMissing">
     *_base;
     *_hardening;
     *_$Environment;

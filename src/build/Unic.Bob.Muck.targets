@@ -29,7 +29,9 @@
             <Output TaskParameter="Value" PropertyName="MuckRecyleAppPool" />
         </GetBobSetting>
 
-
+        <PropertyGroup>
+          <MuckRole Condition="'$(MuckRole)' == ''">author</MuckRole>
+        </PropertyGroup>
 
         <PropertyGroup>
             <publishUrl>$(GlobalWebPath)\$(WebsiteCodeName)\$(WebFolderName)</publishUrl>
