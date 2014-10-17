@@ -49,7 +49,7 @@
     <Message Text="%(MuckTransformFileNames.Identity)" />
     <ItemGroup>
       <MuckWebConfigsToTransformFiles Condition="'%(FilesForPackagingFromProject.Filename)%(FilesForPackagingFromProject.Extension)'=='$(ProjectConfigFileName)'" Include="@(FilesForPackagingFromProject)">
-        <TransformFileDirectory>$(WebPublishPipelineProjectDirectory)\$([System.IO.Path]::GetDirectoryName($([System.String]::new(%(DestinationRelativePath)))))\</TransformFileDirectory>
+        <TransformFileDirectory>$(WebPublishPipelineProjectDirectory)\$([System.IO.Path]::GetDirectoryName($([System.String]::new(%(DestinationRelativePath)))))</TransformFileDirectory>
         <TransformOriginalFolder>$(MuckTransformWebConfigIntermediateLocation)\original</TransformOriginalFolder>
         <TransformFileFolder>$(MuckTransformWebConfigIntermediateLocation)\assist</TransformFileFolder>
         <TransformOutputFile>$(MuckTransformWebConfigIntermediateLocation)\transformed\%(DestinationRelativePath)</TransformOutputFile>
@@ -61,7 +61,7 @@
     </MuckWebConfigsToTransformTemp>
 
     <MuckWebConfigsToTransform Include="@(MuckWebConfigsToTransformTemp)"  Condition="Exists('%(TransformFileDirectory)\%(TransformFileName)')">
-        <TransformFile>%(TransformFileDirectory)\%(TransformFileName)</TransformFile>
+        <TransformFile>%(TransformFileDirectory)%(TransformFileName)</TransformFile>
     </MuckWebConfigsToTransform>
 </ItemGroup>
 <Message Text="@(MuckWebConfigsToTransform)" />
@@ -164,10 +164,10 @@
         Encoding="utf-8"
         File="$(PackageLogDir)\AfterMuckTransformWebConfig.txt"
         Lines="@(FilesForPackagingFromProject->'
-        From:%(Identity) 
-        DestinationRelativePath:%(DestinationRelativePath) 
-        Exclude:%(Exclude) 
-        FromTarget:%(FromTarget) 
+        From:%(Identity)
+        DestinationRelativePath:%(DestinationRelativePath)
+        Exclude:%(Exclude)
+        FromTarget:%(FromTarget)
         Category:%(Category)
         ProjectFileType:%(ProjectFileType)')" Overwrite="True" />
     </Target>
