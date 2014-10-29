@@ -14,5 +14,6 @@
   </metadata>
     <files>
       <file src="src\**" />
+      <file src="packages\**" target="build\muck\packages" />
     </files>
   </package>
