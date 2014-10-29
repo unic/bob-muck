@@ -15,29 +15,7 @@ function Remove-WrongEnvironmentConfigs
   {
     $rootDir = "$WebRoot\App_Config\Include"
     $itemsToKeep = @()
-    foreach($filterPart in $KeepFilter.Split(';')) {
-      $filterPart = $filterPart.Trim()
-      $filterPart = $filterPart.Replace('$Environment', $Environment)
-      $filterPart = $filterPart.Replace('$Role', $Role)
-      foreach($folder in (ls $rootDir -recurse | Where {$_.PSIsContainer})) {
-        if($folder.FullName.Replace($rootDir, "") -like $filterPart) {
-          $itemsToKeep += $folder.FullName
-        }
-      }
-    }
-    foreach($item in (ls "$rootDir" -Recurse | Where {$_.PSIsContainer -eq $true})) {
-      $delete = $true;
-      foreach($keep in $itemsToKeep) {
-        if($keep.StartsWith($item.FullName)) {
-          $delete = $false
-          break;
-        }
-      }
-
-      if($delete -and (Test-Path $item.FullName)) {
-          $item.FullName
-          rm $item.FullName -Recurse
-      }
-    }
+    $pattern = Get-RubblePattern $KeepFilter @{'$Environment'= $Environment; '$Role'= $Role}
+    Remove-RubbleItem $rootDir $pattern
   }
 }
