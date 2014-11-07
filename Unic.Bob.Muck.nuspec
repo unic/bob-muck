@@ -8,8 +8,12 @@
       <iconUrl>https://www.unic.com/img/unic-logo.png</iconUrl>
       <requireLicenseAcceptance>false</requireLicenseAcceptance>
       <description>Muck provides local deployment functionallity</description>
-    </metadata>
+      <dependencies>
+        <dependency id="Unic.Bob.Config" />
+      </dependencies>
+  </metadata>
     <files>
-      <file src="src\**"   />
+      <file src="src\**" />
+      <file src="packages\**" target="build\muck\packages" />
     </files>
   </package>

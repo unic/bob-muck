@@ -29,7 +29,9 @@
             <Output TaskParameter="Value" PropertyName="MuckRecyleAppPool" />
         </GetBobSetting>
 
-
+        <PropertyGroup>
+          <MuckRole Condition="'$(MuckRole)' == ''">author</MuckRole>
+        </PropertyGroup>
 
         <PropertyGroup>
             <publishUrl>$(GlobalWebPath)\$(WebsiteCodeName)\$(WebFolderName)</publishUrl>
@@ -50,7 +52,6 @@
     </Target>
     <Target Name="MuckRecyleAppPool" Condition="'$(MuckRecyleAppPool)' == 'true'">
          <MSBuild.ExtensionPack.Web.Iis7AppPool TaskAction="Recycle" Name="$(WebsiteCodeName)" />
-        <Message Text="adsf" />
     </Target>
     <Import Project="$(MSBuildThisFileDirectory)\XmlTransform.targets" />
 </Project>

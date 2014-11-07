@@ -16,9 +16,7 @@
 				foreach($file in $files) {
 				    if(Test-Path $file) {
 				        $xml = [xml](Get-Content $file )
-				        $nsMgr = New-Object  System.Xml.XmlNamespaceManager ($xml.NameTable);
-				        $nsMgr.AddNamespace("bob", "http://www.unic.com/Bob");
-				        $nodes = $xml.SelectNodes("/bob:Configuration/bob:$Key", $nsMgr);
+				        $nodes = $xml.SelectNodes("/Configuration/$Key");
 
 				        if($nodes.Count -gt 0) {
 				            $value = $nodes[0].InnerText
