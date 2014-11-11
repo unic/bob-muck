@@ -1,1 +1,4 @@
-
+NUGET
+  remote: https://teamcity.unic.com/httpAuth/app/nuget/v1/FeedService.svc
+  specs:
+    Unic.Bob.Rubble (0.1.0)
