@@ -10,6 +10,9 @@
         </BuildDependsOn>
     </PropertyGroup>
     <Target Name="MuckLoadSettings">
+        <GetBobSetting Key="WebsiteCodeName" ProjectPath="$(MSBuildProjectDirectory)"  ModuleDirectory="$(MSBuildThisFileDirectory)">
+            <Output TaskParameter="Value" PropertyName="WebsiteCodeName" />
+        </GetBobSetting>
         <GetBobSetting Key="WebRoot" ProjectPath="$(MSBuildProjectDirectory)"  ModuleDirectory="$(MSBuildThisFileDirectory)">
             <Output TaskParameter="Value" PropertyName="WebRoot" />
         </GetBobSetting>
