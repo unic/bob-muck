@@ -7,22 +7,18 @@
 	<UsingTask AssemblyFile="$(PowerShellTaskFactoryAssemblyFile)" TaskFactory="PowershellTaskFactory" TaskName="GetBobSetting">
 		<ParameterGroup>
 			<Key ParameterType="System.String" Required="true"/>
-			<ConfigDirectory ParameterType="System.String" Required="true"/>
 			<Value Output="true"/>
+            <ModuleDirectory ParameterType="System.String" Required="true"/>
+            <ProjectPath ParameterType="System.String" Required="true"/>
 		</ParameterGroup>
 		<Task>
 			<![CDATA[
-				$files = @("$ConfigDirectory\Bob.config", "$ConfigDirectory\Bob.config.user")
-				foreach($file in $files) {
-				    if(Test-Path $file) {
-				        $xml = [xml](Get-Content $file )
-				        $nodes = $xml.SelectNodes("/Configuration/$Key");
-
-				        if($nodes.Count -gt 0) {
-				            $value = $nodes[0].InnerText
-				        }
-				    }
-				}
+                if(-not (Test-Path $ModuleDirectory\Muck)) {
+                    throw "Could not find Muck PowerShell module"
+                }
+                Import-Module $ModuleDirectory\Muck
+                $config = Get-ScProjectConfig -ProjectPath $ProjectPath
+                $value = $config[$Key]
 			]]>
 		</Task>
 	</UsingTask>
@@ -59,7 +55,6 @@
 	</PropertyGroup>
   <!-- Muck static properties -->
 	<PropertyGroup>
-		<BobConfigPath>$(MSBuildProjectDirectory)\App_Config</BobConfigPath>
     	<MuckEnvironment>local</MuckEnvironment>
       <MuckBaseWebConfigIdentifier>base</MuckBaseWebConfigIdentifier>
       <MuckPerformXmlTransform>True</MuckPerformXmlTransform>

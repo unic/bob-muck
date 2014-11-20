@@ -10,22 +10,16 @@
         </BuildDependsOn>
     </PropertyGroup>
     <Target Name="MuckLoadSettings">
-        <GetBobSetting Key="WebsiteCodeName" ConfigDirectory="$(BobConfigPath)">
-            <Output TaskParameter="Value" PropertyName="WebsiteCodeName" />
+        <GetBobSetting Key="WebRoot" ProjectPath="$(MSBuildProjectDirectory)"  ModuleDirectory="$(MSBuildThisFileDirectory)">
+            <Output TaskParameter="Value" PropertyName="WebRoot" />
         </GetBobSetting>
-        <GetBobSetting Key="GlobalWebPath" ConfigDirectory="$(BobConfigPath)">
-            <Output TaskParameter="Value" PropertyName="GlobalWebPath" />
-        </GetBobSetting>
-        <GetBobSetting Key="WebFolderName" ConfigDirectory="$(BobConfigPath)">
-            <Output TaskParameter="Value" PropertyName="WebFolderName" />
-        </GetBobSetting>
-        <GetBobSetting Key="ActiveRole" ConfigDirectory="$(BobConfigPath)">
+        <GetBobSetting Key="ActiveRole" ProjectPath="$(MSBuildProjectDirectory)"  ModuleDirectory="$(MSBuildThisFileDirectory)">
             <Output TaskParameter="Value" PropertyName="MuckRole" />
         </GetBobSetting>
-        <GetBobSetting Key="KeepAppConfigIncludes" ConfigDirectory="$(BobConfigPath)">
+        <GetBobSetting Key="KeepAppConfigIncludes" ProjectPath="$(MSBuildProjectDirectory)"  ModuleDirectory="$(MSBuildThisFileDirectory)">
             <Output TaskParameter="Value" PropertyName="MuckKeepAppConfigIncludes" />
         </GetBobSetting>
-        <GetBobSetting Key="MuckRecyleAppPool" ConfigDirectory="$(BobConfigPath)">
+        <GetBobSetting Key="MuckRecyleAppPool" ProjectPath="$(MSBuildProjectDirectory)"  ModuleDirectory="$(MSBuildThisFileDirectory)">
             <Output TaskParameter="Value" PropertyName="MuckRecyleAppPool" />
         </GetBobSetting>
 
@@ -34,7 +28,7 @@
         </PropertyGroup>
 
         <PropertyGroup>
-            <publishUrl>$(GlobalWebPath)\$(WebsiteCodeName)\$(WebFolderName)</publishUrl>
+            <publishUrl>$(WebRoot)</publishUrl>
             <MuckBaseWebConfigIdentifier>base</MuckBaseWebConfigIdentifier>
             <MuckPerformXmlTransform>True</MuckPerformXmlTransform>
         </PropertyGroup>
