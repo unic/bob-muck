@@ -2,7 +2,7 @@ function ResolvePath() {
   param($PackageId, $RelativePath)
   $paths = @("$PSScriptRoot\..\..\..\packages", "$PSScriptRoot\packages")
   foreach($packPath in $paths) {
-    $path = Join-Path $packPath "$PackageId.*\$RelativePath"
+    $path = Join-Path $packPath "$PackageId\$RelativePath"
     if((Test-Path $packPath) -and (Test-Path $path)) {
       Resolve-Path $path
       return
@@ -12,6 +12,7 @@ function ResolvePath() {
 }
 
 Import-Module (ResolvePath "Unic.Bob.Rubble" "tools\Rubble")
-#Import-Module "D:\sources\bob\bob-rubble\src\tools\Rubble" -Force
+Import-Module (ResolvePath "Unic.Bob.Config" "tools\BobConfig")
+
 Get-ChildItem -Path $PSScriptRoot\*.ps1 -Exclude *.Tests.ps1 | Foreach-Object{ . $_.FullName }
 Export-ModuleMember -Function * -Alias *

@@ -186,3 +186,4 @@ UpgradeLog*.htm
 FakesAssemblies/
 
 *.nupkg
+paket.exe
