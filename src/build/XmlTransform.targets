@@ -30,7 +30,7 @@
 
   <MuckTransformWebConfigIntermediateTempLocation>$(MuckTransformWebConfigIntermediateLocation)\temp</MuckTransformWebConfigIntermediateTempLocation>
 </PropertyGroup>
-<Target AfterTargets="$(MuckTransformWebConfigAfterTargets)" BeforeTargets="$(MuckTransformWebConfigBeforeTargets)" Condition="'$(MuckTransformWebConfig)' != 'false'" DependsOnTargets="$(MuckTransformWebConfigDependsOn)" Name="MuckTransformWebConfig">
+<Target AfterTargets="$(MuckTransformWebConfigAfterTargets)" BeforeTargets="$(MuckTransformWebConfigBeforeTargets)" Condition="'$(MuckTransformWebConfig)' == 'True'" DependsOnTargets="$(MuckTransformWebConfigDependsOn)" Name="MuckTransformWebConfig">
     <CallTarget RunEachTargetSeparately="False" Targets="$(OnAfterMuckTransformWebConfig)"/>
 </Target>
 <!--********************************************************************-->
@@ -173,8 +173,8 @@
     </Target>
 
 
-    <PropertyGroup>
-        <OnAfterTransformWebConfig>
+    <PropertyGroup Condition="'$(MuckPerformXmlTransform)' == 'True'">
+        <OnAfterTransformWebConfig Condition="'$(MuckPerformXmlTransform)' == 'True'">
           $(OnAfterTransformWebConfig);
           MuckTransformWebConfig;
       </OnAfterTransformWebConfig>
