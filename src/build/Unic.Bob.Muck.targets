@@ -33,7 +33,6 @@
         <PropertyGroup>
             <publishUrl>$(WebRoot)</publishUrl>
             <MuckBaseWebConfigIdentifier>base</MuckBaseWebConfigIdentifier>
-            <MuckPerformXmlTransform>True</MuckPerformXmlTransform>
         </PropertyGroup>
         <ItemGroup>
             <MuckTransformFileNames Include="$(_ProjectConfigFilePrefix).$(MuckBaseWebConfigIdentifier)$(_ProjectConfigFileExtension)"></MuckTransformFileNames>
