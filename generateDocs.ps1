@@ -5,6 +5,7 @@ $module = "Muck"
 Import-Module "$PSScriptRoot\packages\Unic.Bob.Keith\Keith"
 Import-Module "$PSScriptRoot\src\build\$module" -Force
 
-New-PSApiDoc -ModuleName $module -Path "$PSScriptRoot\docs\"
+New-PsDoc -Module $module -Path "$PSScriptRoot\docs\" -OutputLocation "$PSScriptRoot\docs-generated"
 
-gitbook build "$PSScriptRoot\docs\"
+gitbook build "$PSScriptRoot\docs-generated\"
+
