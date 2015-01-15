@@ -3,8 +3,8 @@
 Removes all folders in the include folder, which don't match the current envrionment and role.
 
 .DESCRIPTION
-Removes all folders in the App_Conifg\Include folder of the WebRoot,
-which don't match the current envrionment and role.
+Removes all folders in the App_Config\Include folder of the WebRoot,
+which don't match the current environment and role.
 
 
 .PARAMETER WebRoot
@@ -14,10 +14,11 @@ The path to the WebRoot.
 The current environment, e.g. "local"
 
 .PARAMETER Role
-The current role, normally this is delivey or author.
+The current role, normally this is _delivery_ or _author_.
 
 .PARAMETER KeepFilter
-A semicolonn separated list of patterns for folder to keep.
+A semicolon separated list of patterns for folders to keep.
+All folders inside `$WebRoot\App_Config\Include` which don't match any of this pattern, will be deleted.
 The '$Environment' and '$Role' placeholder can be used here.
 
 .EXAMPLE
