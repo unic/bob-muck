@@ -57,6 +57,12 @@ Module development
 Basically Muck can be used in Modules as it would be used in Websites. Simply install Muck in your Website project of your Module and set the "WebRoot" parameter in Bob config.
 Technical Documentation
 
+### Files to only publish locally
+It happens that one needs to publish a file on the local machine, but it should then not be included in the NuGet package.
+To solve this case Muck delivers a custom build action "BobPublishLocal".
+So if you need a file to only be published locally, just set the build action
+of the file to "BobPublishLocal".
+
 
 ## Technical Documentation
 

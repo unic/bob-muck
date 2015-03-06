@@ -60,4 +60,8 @@
       <MuckBaseWebConfigIdentifier>base</MuckBaseWebConfigIdentifier>
       <MuckPerformXmlTransform Condition="'$(RunMuck)' == 'True'">True</MuckPerformXmlTransform>
 	</PropertyGroup>
+
+    <ItemGroup>
+        <AvailableItemName Include="BobPublishLocal" />
+    </ItemGroup>
 </Project>
