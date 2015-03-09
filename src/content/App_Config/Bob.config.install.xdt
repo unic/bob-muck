@@ -1,15 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
-    <MuckRecyleAppPool xdt:Transform="InsertIfMissing">false</MuckRecyleAppPool>
-    <WebsiteCodeName xdt:Transform="InsertIfMissing">customer-website</WebsiteCodeName>
-    <WebFolderName xdt:Transform="InsertIfMissing">Web</WebFolderName>
-    <GlobalWebPath xdt:Transform="InsertIfMissing">d:\web</GlobalWebPath>
-    <KeepAppConfigIncludes xdt:Transform="InsertIfMissing">
-        *_sitecore;
-        *_base;
-        *_hardening;
-        *_$Environment;
-        *_$Role;
-        *_$Environment.$Role
-    </KeepAppConfigIncludes>
+
 </Configuration>
