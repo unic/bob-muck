@@ -9,6 +9,9 @@
           MuckRecyleAppPool;
         </BuildDependsOn>
     </PropertyGroup>
+    <ItemGroup Condition="'$(BuildingInsideVisualStudio)' == 'True'">
+        <Content Include="@(BobPublishLocal)" />
+    </ItemGroup>
     <Target Name="MuckLoadSettings">
         <GetBobSetting Key="WebsiteCodeName" ProjectPath="$(MSBuildProjectDirectory)"  ModuleDirectory="$(MSBuildThisFileDirectory)">
             <Output TaskParameter="Value" PropertyName="WebsiteCodeName" />
@@ -33,7 +36,6 @@
         <PropertyGroup>
             <publishUrl>$(WebRoot)</publishUrl>
             <MuckBaseWebConfigIdentifier>base</MuckBaseWebConfigIdentifier>
-            <MuckPerformXmlTransform>True</MuckPerformXmlTransform>
         </PropertyGroup>
         <ItemGroup>
             <MuckTransformFileNames Include="$(_ProjectConfigFilePrefix).$(MuckBaseWebConfigIdentifier)$(_ProjectConfigFileExtension)"></MuckTransformFileNames>

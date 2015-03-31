@@ -24,13 +24,14 @@
       PostMuckTransformWebConfig;
   </MuckTransformWebConfigDependsOn>
 
-  <MuckTransformWebConfigEnabled>True</MuckTransformWebConfigEnabled>
+  <MuckTransformWebConfigEnabled Condition="'$(MuckPerformXmlTransform)' == 'True'">True</MuckTransformWebConfigEnabled>
   <MuckTransformWebConfigIntermediateOutput Condition="'$(MuckTransformWebConfigIntermediateOutput)'==''">MuckTransformWebConfig</MuckTransformWebConfigIntermediateOutput>
   <MuckTransformWebConfigIntermediateLocation Condition="'$(MuckTransformWebConfigIntermediateLocation)'==''">$(_WPPDefaultIntermediateOutputPath)$(MuckTransformWebConfigIntermediateOutput)</MuckTransformWebConfigIntermediateLocation>
 
   <MuckTransformWebConfigIntermediateTempLocation>$(MuckTransformWebConfigIntermediateLocation)\temp</MuckTransformWebConfigIntermediateTempLocation>
 </PropertyGroup>
-<Target AfterTargets="$(MuckTransformWebConfigAfterTargets)" BeforeTargets="$(MuckTransformWebConfigBeforeTargets)" Condition="'$(MuckTransformWebConfig)' != 'false'" DependsOnTargets="$(MuckTransformWebConfigDependsOn)" Name="MuckTransformWebConfig">
+<Target AfterTargets="$(MuckTransformWebConfigAfterTargets)" BeforeTargets="$(MuckTransformWebConfigBeforeTargets)"  DependsOnTargets="$(MuckTransformWebConfigDependsOn)" Name="MuckTransformWebConfig" Condition="'$(MuckPerformXmlTransform)' == 'True'">
+
     <CallTarget RunEachTargetSeparately="False" Targets="$(OnAfterMuckTransformWebConfig)"/>
 </Target>
 <!--********************************************************************-->
@@ -79,6 +80,7 @@
     </PreMuckTransformWebConfigDependsOn>
 </PropertyGroup>
 <Target DependsOnTargets="$(PreMuckTransformWebConfigDependsOn)" Name="PreMuckTransformWebConfig">
+    <Message Text="A: $(OnAfterTransformWebConfig)" />
     <ItemGroup>
       <!-- Gather all the web.config which doesn't have the transform file -->
       <_TempNoTrnasformFileForMuckWebConfigsToTransform Condition="!Exists(%(TransformFile))" Include="@(MuckWebConfigsToTransform)"/>
@@ -174,7 +176,7 @@
 
 
     <PropertyGroup>
-        <OnAfterTransformWebConfig>
+        <OnAfterTransformWebConfig Condition="'$(MuckPerformXmlTransform)' == 'True'">
           $(OnAfterTransformWebConfig);
           MuckTransformWebConfig;
       </OnAfterTransformWebConfig>

@@ -51,12 +51,17 @@
 		<LaunchSiteAfterPublish>True</LaunchSiteAfterPublish>
 		<ExcludeApp_Data>False</ExcludeApp_Data>
 		<DeleteExistingFiles>False</DeleteExistingFiles>
-    <DeployOnBuild Condition="'$(BuildingInsideVisualStudio)' == 'True'">True</DeployOnBuild>
+    	<RunMuck Condition="'$(BuildingInsideVisualStudio)' == 'True'">True</RunMuck>
+    	<DeployOnBuild Condition="'$(RunMuck)' == 'True'">True</DeployOnBuild>
 	</PropertyGroup>
   <!-- Muck static properties -->
 	<PropertyGroup>
     	<MuckEnvironment>local</MuckEnvironment>
       <MuckBaseWebConfigIdentifier>base</MuckBaseWebConfigIdentifier>
-      <MuckPerformXmlTransform>True</MuckPerformXmlTransform>
+      <MuckPerformXmlTransform Condition="'$(RunMuck)' == 'True'">True</MuckPerformXmlTransform>
 	</PropertyGroup>
+
+    <ItemGroup>
+        <AvailableItemName Include="BobPublishLocal" />
+    </ItemGroup>
 </Project>
