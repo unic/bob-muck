@@ -31,6 +31,10 @@
 
         <PropertyGroup>
           <MuckRole Condition="'$(MuckRole)' == ''">author</MuckRole>
+          <MuckKeepAppConfigIncludes Condition="'$(MuckIsIntegrationTests)' == 'True'">
+              $(MuckKeepAppConfigIncludes);
+              *_integration
+          </MuckKeepAppConfigIncludes>
         </PropertyGroup>
 
         <PropertyGroup>
@@ -42,6 +46,9 @@
             <MuckTransformFileNames Include="$(_ProjectConfigFilePrefix).$(MuckRole)$(_ProjectConfigFileExtension)"></MuckTransformFileNames>
             <MuckTransformFileNames Include="$(_ProjectConfigFilePrefix).$(MuckEnvironment)$(_ProjectConfigFileExtension)"></MuckTransformFileNames>
             <MuckTransformFileNames Include="$(_ProjectConfigFilePrefix).$(MuckEnvironment).$(MuckRole)$(_ProjectConfigFileExtension)"></MuckTransformFileNames>
+            <MuckTransformFileNames
+                Condition="'$(MuckIsIntegrationTests)' == 'True'"
+                Include="$(_ProjectConfigFilePrefix).integration$(_ProjectConfigFileExtension)" />
 
         </ItemGroup>
 
