@@ -21,12 +21,23 @@ function Set-ScActiveEnvironment
   )
   Process
   {
+      Write-Warning "Work started"
+      
       $config = Get-ScProjectConfig
+    
+      Write-Warning $config
+      Write-Warning "Config written"
       
       Set-ScUserConfigValue -Key "ActiveEnvironment" -Value $Environment
       
+      Write-Warning "ActiveEnvironment set"
+      
       if ($dte) {
+        Write-Warning $dte
+        
         $dte.Solution.SolutionBuild.Build()
+        
+        Write-Warning "Solution built"
      }
      
   }
