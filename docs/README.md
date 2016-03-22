@@ -19,6 +19,7 @@ After the package is installed, a deployment will be done on each build started 
 | Key | Description | Example | Default |
 | --- | --- | --- | --- |
 | ActiveRole |	The role which Muck will deploy to. This is used for Web.config transform and for cleaning up the "Include" folder.	| `<MuckRole>delivery</MuckRole>` |  |
+| ActiveEnvironment |	The environment which Muck will deploy to. This is used for Web.config transform and for cleaning up the "Include" folder.	| `<MuckEnvironment>local</MuckEnvironment>` |  |
 | WebFolderName |	The name of the folder inside [GlobalWebPath]\[WebsiteCodeName] which contains the WebRoot	| `<WebFolderName>Web</WebFolderName>` |  |
 | WebsiteCodeName |	The name of IIS site and application pool. | `<WebsiteCodeName>post-internet</WebsiteCodeName>` |  |
 | GlobalWebPath |	Path to the folder where all sites are located |	`<GlobalWebPath>D:\Web</GlobalWebPath>`	 |  |
@@ -32,8 +33,8 @@ After the installation when performing a build inside Visual Studio following ac
 * Web.debug.config
     * Web.base.config
     * Web.$(ActiveRole).config
-    * Web.local.config
-    * Web.local.$(ActiveRole).config
+    * Web.$(ActiveEnvironment).config
+    * Web.$(ActiveEnvironment).$(ActiveRole).config
 * Delete folders in `App_Config\Include` which do not match the $(KeepAppConfigIncludes) pattern
 * If $(MuckRecyleAppPool) is set to true, the application pool will be recycled
 

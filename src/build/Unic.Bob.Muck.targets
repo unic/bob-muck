@@ -22,15 +22,19 @@
         <GetBobSetting Key="ActiveRole" ProjectPath="$(MSBuildProjectDirectory)"  ModuleDirectory="$(MSBuildThisFileDirectory)">
             <Output TaskParameter="Value" PropertyName="MuckRole" />
         </GetBobSetting>
+        <GetBobSetting Key="ActiveEnvironment" ProjectPath="$(MSBuildProjectDirectory)"  ModuleDirectory="$(MSBuildThisFileDirectory)">
+            <Output TaskParameter="Value" PropertyName="MuckEnvironment" />
+        </GetBobSetting>
         <GetBobSetting Key="KeepAppConfigIncludes" ProjectPath="$(MSBuildProjectDirectory)"  ModuleDirectory="$(MSBuildThisFileDirectory)">
             <Output TaskParameter="Value" PropertyName="MuckKeepAppConfigIncludes" />
         </GetBobSetting>
         <GetBobSetting Key="MuckRecyleAppPool" ProjectPath="$(MSBuildProjectDirectory)"  ModuleDirectory="$(MSBuildThisFileDirectory)">
             <Output TaskParameter="Value" PropertyName="MuckRecyleAppPool" />
         </GetBobSetting>
-
+        
         <PropertyGroup>
           <MuckRole Condition="'$(MuckRole)' == ''">author</MuckRole>
+          <MuckEnvironment Condition="'$(MuckEnvironment)' == ''">local</MuckEnvironment>
           <MuckKeepAppConfigIncludes Condition="'$(MuckIsIntegrationTests)' == 'True'">
               $(MuckKeepAppConfigIncludes);
               *_integration
