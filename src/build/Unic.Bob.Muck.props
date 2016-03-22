@@ -56,7 +56,6 @@
 	</PropertyGroup>
   <!-- Muck static properties -->
 	<PropertyGroup>
-    	<MuckEnvironment>local</MuckEnvironment>
       <MuckBaseWebConfigIdentifier>base</MuckBaseWebConfigIdentifier>
       <MuckPerformXmlTransform Condition="'$(RunMuck)' == 'True'">True</MuckPerformXmlTransform>
 	</PropertyGroup>
