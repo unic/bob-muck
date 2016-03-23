@@ -59,5 +59,4 @@
     <Target Name="MuckRecyleAppPool" Condition="'$(MuckRecyleAppPool)' == 'true' And '$(WebsiteCodeName)' != ''">
          <MSBuild.ExtensionPack.Web.Iis7AppPool TaskAction="Recycle" Name="$(WebsiteCodeName)" />
     </Target>
-    <Import Project="$(MSBuildThisFileDirectory)\XmlTransform.targets" />
 </Project>
