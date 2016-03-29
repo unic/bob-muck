@@ -17,7 +17,9 @@
                     throw "Could not find Muck PowerShell module"
                 }
                 Import-Module $ModuleDirectory\Muck
-                $config = Get-ScProjectConfig -ProjectPath $ProjectPath
+               
+                $config = Get-ScProjectConfig 
+         
                 $value = $config[$Key]
 			]]>
 		</Task>
