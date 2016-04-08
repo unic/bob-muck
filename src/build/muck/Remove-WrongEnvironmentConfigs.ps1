@@ -42,7 +42,7 @@ function Remove-WrongEnvironmentConfigs
   {
     $rootDir = "$WebRoot\App_Config\Include"
     $itemsToKeep = @()
-    $pattern = Get-RubblePattern $KeepFilter @{'$Environment'= $Environment; '$Role'= $Role}
+    $pattern = Get-RubblePattern $KeepFilter @{'$Environment'= $Environment; '$Role'= $Role.Split(";")}
     Remove-RubbleItem $rootDir $pattern
   }
 }
