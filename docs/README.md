@@ -75,8 +75,8 @@ Add the following lines to the end of your project file (of the startup project)
 <PropertyGroup>
   <MuckProjectType>DotNetCore</MuckProjectType>
 </PropertyGroup>
-<Import Project="c:\Sources\Bob\bob-muck\src\build\Unic.Bob.Muck.props" Condition="Exists('c:\Sources\Bob\bob-muck\src\build\Unic.Bob.Muck.props')" /> 
-<Import Project="c:\Sources\Bob\bob-muck\src\build\Unic.Bob.Muck.targets" Condition="Exists('c:\Sources\Bob\bob-muck\src\build\Unic.Bob.Muck.targets')" />
+<Import Project="$(USERPROFILE)\.nuget\packages\Unic.Bob.Muck\<YourMuckVersion>\build\Unic.Bob.Muck.props" Condition="Exists('$(USERPROFILE)\.nuget\packages\Unic.Bob.Muck\<YourMuckVersion>\build\Unic.Bob.Muck.props')" /> 
+<Import Project="$(USERPROFILE)\.nuget\packages\Unic.Bob.Muck\<YourMuckVersion>\build\Unic.Bob.Muck.targets" Condition="Exists('$(USERPROFILE)\.nuget\packages\Unic.Bob.Muck\<YourMuckVersion>\build\Unic.Bob.Muck.targets')" />
 ```
 
 After the package is installed, a deployment will be done on each build started inside Visual Studio. Muck can be easily configured with the Bob.config configuration files. Following Keys will be used:
