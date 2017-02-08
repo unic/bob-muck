@@ -43,6 +43,40 @@
 			]]>
 		</Task>
 	</UsingTask>
+	<UsingTask AssemblyFile="$(PowerShellTaskFactoryAssemblyFile)" TaskFactory="PowershellTaskFactory" TaskName="WritePublishManifest">
+		<ParameterGroup>
+			<ModuleDirectory ParameterType="System.String" Required="true"/>
+			<WebRoot ParameterType="System.String" Required="true" />
+			<TempPath ParameterType="System.String" />
+			<PublishProfile Output="true" />
+		</ParameterGroup>
+		<Task>
+			<![CDATA[
+                if(-not (Test-Path $ModuleDirectory\Muck)) {
+                    throw "Could not find Muck PowerShell module"
+                }
+                Import-Module $ModuleDirectory\Muck
+               
+                $publishProfile = New-PublishManifest -WebRoot $WebRoot 
+   			]]>
+		</Task>
+	</UsingTask>
+	<UsingTask AssemblyFile="$(PowerShellTaskFactoryAssemblyFile)" TaskFactory="PowershellTaskFactory" TaskName="RemovePublishManifest">
+		<ParameterGroup>
+			<ModuleDirectory ParameterType="System.String" Required="true"/>
+			<ManifestFilePath ParameterType="System.String" Required="true" />
+		</ParameterGroup>
+		<Task>
+			<![CDATA[
+                if(-not (Test-Path $ModuleDirectory\Muck)) {
+                    throw "Could not find Muck PowerShell module"
+                }
+                Import-Module $ModuleDirectory\Muck
+               
+                Remove-PublishManifestDirectory -ManifestFilePath $ManifestFilePath 
+   			]]>
+		</Task>
+	</UsingTask>
 
 	<!-- Web Deploy Properties-->
 	<PropertyGroup>
@@ -60,6 +94,7 @@
 	<PropertyGroup>
       <MuckBaseWebConfigIdentifier>base</MuckBaseWebConfigIdentifier>
       <MuckPerformXmlTransform Condition="'$(RunMuck)' == 'True'">True</MuckPerformXmlTransform>
+      <MuckProjectType Condition="'$(MuckProjectType)' == ''">Sitecore</MuckProjectType>
 	</PropertyGroup>
 
     <ItemGroup>

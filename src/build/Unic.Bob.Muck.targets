@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <PropertyGroup>
-        <BuildDependsOn Condition="'$(BuildingInsideVisualStudio)' == 'True'">
+    <PropertyGroup>		
+		<BuildDependsOn Condition="'$(BuildingInsideVisualStudio)' == 'True' And '$(MuckProjectType)' == 'Sitecore'">
           $(BuildDependsOn);
           MuckLoadSettings;
           WebFileSystemPublish;
           MuckRemoveEnvironmentFiles;
           MuckRecyleAppPool;
         </BuildDependsOn>
-    </PropertyGroup>
+
+		<BuildDependsOn Condition="'$(BuildingInsideVisualStudio)' == 'True' And '$(MuckProjectType)' == 'DotNetCore'">
+          $(BuildDependsOn);
+          MuckLoadSettings;
+		  MuckWritePublishManifest;
+          MuckRecyleAppPool;
+        </BuildDependsOn>
+	</PropertyGroup>
     <ItemGroup Condition="'$(BuildingInsideVisualStudio)' == 'True'">
         <Content Include="@(BobPublishLocal)" />
     </ItemGroup>
@@ -60,6 +67,24 @@
     <Target Name ="MuckRemoveEnvironmentFiles" Condition="'$(MuckKeepAppConfigIncludes)' != ''">
         <RemoveEnvironmentFiles ModuleDirectory="$(MSBuildThisFileDirectory)" Environment="$(MuckEnvironment)" Role="$(MuckRole)" WebRoot="$(publishUrl)" KeepFilter="$(MuckKeepAppConfigIncludes)" />
     </Target>
+	
+	<Target Name="MuckWritePublishManifest">
+        <WritePublishManifest ModuleDirectory="$(MSBuildThisFileDirectory)" WebRoot="$(publishUrl)" >
+			<Output TaskParameter="PublishProfile" PropertyName="MuckPublishProfile" />
+		</WritePublishManifest>
+		<Message Text="Generated temporary PublishManifest '$(MuckPublishProfile)'" />
+		
+		<PropertyGroup>
+			<WebPublishProfileFile>$(MuckPublishProfile)</WebPublishProfileFile>
+			<PublishPowerShellVersion Condition="'$(PublishPowerShellVersion)' == '' And '$(SDKToolingIdentifier)' == 'DotNetCore'">1.2.0</PublishPowerShellVersion>
+			<PowerShellScriptFile Condition= "'$(PowerShellScriptFile)'=='' ">$([System.IO.Path]::GetFullPath($(VSToolsPath)\Web\Powershell\$(PublishPowerShellVersion)\default-publish.ps1))</PowerShellScriptFile>
+		</PropertyGroup>
+    </Target>
+    <Target Name="MuckRemovePublishManifest" AfterTargets="Build">
+        <RemovePublishManifest ModuleDirectory="$(MSBuildThisFileDirectory)" ManifestFilePath="$(MuckPublishProfile)" Condition="Exists('$(MuckPublishProfile)')" />
+		<Message Text="Cleaned up temporary  PublishManifest '$(MuckPublishProfile)'" />
+	</Target>
+
     <Target Name="MuckRecyleAppPool" Condition="'$(MuckRecyleAppPool)' == 'true' And '$(WebsiteCodeName)' != ''">
          <MSBuild.ExtensionPack.Web.Iis7AppPool TaskAction="Recycle" Name="$(WebsiteCodeName)" />
     </Target>

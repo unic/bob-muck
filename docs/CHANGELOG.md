@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.3
+* Added Support for dotnet core projects
+
 ## 1.2
 * Updated the theme
 
