@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.3
+## 2.1
 * Added Support for dotnet core projects
 
 ## 1.2
