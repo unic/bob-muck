@@ -1,0 +1,30 @@
+environment:
+  nuspec_file: ".\Unic.Bob.Muck.nuspec"
+  nuget_packageId: "Unic.Bob.Muck"
+
+install:
+  - choco install gitversion.portable -pre -y
+
+assembly_info:
+  patch: false
+
+before_build:
+  - nuget restore
+  - ps: gitversion /l console /output buildserver
+  - ps: . .\restore.ps1
+
+
+build: off
+
+
+#before_test:
+#  - ps: Import-Module "./packages/pester/tools/pester.psm1"
+
+#test_script:
+#  - ps: Invoke-Pester ./src -OutputFile TestResults.xml -OutputFormat NUnitXml -EnableExit
+
+
+after_build:
+  - cmd: ECHO nuget pack %nuspec% -version "%GitVersion_NuGetVersion%" -prop "target=%CONFIGURATION%"
+#  - cmd: nuget pack %nuspec% -version "%GitVersion_NuGetVersion%" -prop "target=%CONFIGURATION%"
+#  - cmd: appveyor PushArtifact "%nuget_packageId%.%GitVersion_NuGetVersion%.nupkg"
