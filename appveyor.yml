@@ -1,15 +1,14 @@
 image: Visual Studio 2017
 
 environment:
-  nuspec_file: .\Unic.Bob.Muck.nuspec
-  nuget_packageId: Unic.Bob.Muck
+  Nuspec_File: .\Unic.Bob.Muck.nuspec
+  Artefact_Output_Dir: .\output
 
 install:
   - choco install gitversion.portable -y
   - ps: gitversion /l console /output buildserver
   - ps: . .\restore.ps1
-  - cmd: ECHO nuget pack %nuspec_file% -version "%GitVersion_NuGetVersion%"
-  - cmd: appveyor PushArtifact "%nuget_packageId%.%GitVersion_NuGetVersion%.nupkg"
+  - cmd: ECHO nuget pack %Nuspec_File% -version "%GitVersion_NuGetVersion%" -OutputDirectory %Artefact_Output_Dir%
 
 assembly_info:
   patch: false
@@ -21,3 +20,6 @@ before_test:
 
 test_script:
   - ps: Invoke-Pester ./src -OutputFile TestResults.xml -OutputFormat NUnitXml -EnableExit
+
+artifacts:
+  - path: '.\%Artefact_Output_Dir%\*.nupkg'
