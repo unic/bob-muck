@@ -1,10 +1,11 @@
+image: Visual Studio 2017
+
 environment:
   nuspec_file: .\Unic.Bob.Muck.nuspec
   nuget_packageId: Unic.Bob.Muck
 
 install:
   - choco install gitversion.portable -y
-  - nuget restore
   - ps: gitversion /l console /output buildserver
   - ps: . .\restore.ps1
   - cmd: ECHO nuget pack %nuspec% -version "%GitVersion_NuGetVersion%" -prop "target=%CONFIGURATION%"
