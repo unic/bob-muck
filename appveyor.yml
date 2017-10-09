@@ -1,6 +1,6 @@
 environment:
-  nuspec_file: ".\Unic.Bob.Muck.nuspec"
-  nuget_packageId: "Unic.Bob.Muck"
+  nuspec_file: .\Unic.Bob.Muck.nuspec
+  nuget_packageId: Unic.Bob.Muck
 
 install:
   - choco install gitversion.portable -pre -y
