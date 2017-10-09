@@ -9,18 +9,15 @@ install:
   - ps: gitversion /l console /output buildserver
   - ps: . .\restore.ps1
   - cmd: ECHO nuget pack %nuspec_file% -version "%GitVersion_NuGetVersion%"
-  - cmd: ECHO %nuget_packageId%
- 
-#  - cmd: nuget pack %nuspec_file% -version "%GitVersion_NuGetVersion%" -prop "target=%CONFIGURATION%"
-#  - cmd: appveyor PushArtifact "%nuget_packageId%.%GitVersion_NuGetVersion%.nupkg"
+  - cmd: appveyor PushArtifact "%nuget_packageId%.%GitVersion_NuGetVersion%.nupkg"
 
 assembly_info:
   patch: false
 
 build: off
 
-#before_test:
-#  - ps: Import-Module "./packages/pester/tools/pester.psm1"
+before_test:
+  - ps: Import-Module "./packages/pester/tools/pester.psm1"
 
-#test_script:
-#  - ps: Invoke-Pester ./src -OutputFile TestResults.xml -OutputFormat NUnitXml -EnableExit
+test_script:
+  - ps: Invoke-Pester ./src -OutputFile TestResults.xml -OutputFormat NUnitXml -EnableExit
