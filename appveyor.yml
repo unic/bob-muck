@@ -1,6 +1,10 @@
+version: '{build}'
 image: Visual Studio 2017
-
 environment:
+  PAKET_USER:
+    secure: gJWu6tlxq9hCQZ20SSyX7g==
+  PAKET_PASSWORD:
+    secure: GrAGau+8oESef/W0sTTmvA==
   Nuspec_File: .\Unic.Bob.Muck.nuspec
   Artefact_Output_Dir: .\output
 
