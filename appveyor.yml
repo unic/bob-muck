@@ -12,7 +12,8 @@ install:
   - choco install gitversion.portable -y
   - ps: gitversion /l console /output buildserver
   - ps: . .\restore.ps1
-  - cmd: nuget pack %APPVEYOR_BUILD_FOLDER%%Nuspec_File% -version "%GitVersion_NuGetVersionV2%" -OutputDirectory %Artefact_Output_Dir%
+  - cmd: nuget pack %Nuspec_File% -version "%GitVersion_NuGetVersionV2%" -OutputDirectory %Artefact_Output_Dir%
+  - cmd: appveyor PushArtifact %Artefact_Output_Dir%%nuget_packageId%.%GitVersion_NuGetVersion%.nupkg"
 
 assembly_info:
   patch: false
