@@ -15,11 +15,11 @@ assembly_info:
 
 build: off
 
-before_test:
-  - ps: Import-Module "./packages/pester/tools/pester.psm1"
+#before_test:
+#  - ps: Import-Module "./packages/pester/tools/pester.psm1"
 
-test_script:
-  - ps: Invoke-Pester ./src -OutputFile TestResults.xml -OutputFormat NUnitXml -EnableExit
+#test_script:
+#  - ps: Invoke-Pester ./src -OutputFile TestResults.xml -OutputFormat NUnitXml -EnableExit
 
 artifacts:
   - path: '.\%Artefact_Output_Dir%\*.nupkg'
