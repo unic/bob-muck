@@ -8,8 +8,10 @@ install:
   - choco install gitversion.portable -y
   - ps: gitversion /l console /output buildserver
   - ps: . .\restore.ps1
-  - cmd: ECHO nuget pack %nuspec% -version "%GitVersion_NuGetVersion%" -prop "target=%CONFIGURATION%"
-#  - cmd: nuget pack %nuspec% -version "%GitVersion_NuGetVersion%" -prop "target=%CONFIGURATION%"
+  - cmd: ECHO nuget pack %nuspec_file% -version "%GitVersion_NuGetVersion%"
+  - cmd: ECHO %nuget_packageId%
+ 
+#  - cmd: nuget pack %nuspec_file% -version "%GitVersion_NuGetVersion%" -prop "target=%CONFIGURATION%"
 #  - cmd: appveyor PushArtifact "%nuget_packageId%.%GitVersion_NuGetVersion%.nupkg"
 
 assembly_info:
@@ -22,5 +24,3 @@ build: off
 
 #test_script:
 #  - ps: Invoke-Pester ./src -OutputFile TestResults.xml -OutputFormat NUnitXml -EnableExit
-
-
