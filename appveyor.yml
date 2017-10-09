@@ -12,12 +12,13 @@ install:
   - choco install gitversion.portable -y
   - ps: gitversion /l console /output buildserver
   - ps: . .\restore.ps1
-  - cmd: ECHO nuget pack %Nuspec_File% -version "%GitVersion_NuGetVersion%" -OutputDirectory %Artefact_Output_Dir%
+  - cmd: nuget pack %APPVEYOR_BUILD_FOLDER%%Nuspec_File% -version "%GitVersion_NuGetVersionV2%" -OutputDirectory %Artefact_Output_Dir%
 
 assembly_info:
   patch: false
 
 build: off
+test: off
 
 #before_test:
 #  - ps: Import-Module "./packages/pester/tools/pester.psm1"
