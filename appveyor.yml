@@ -4,21 +4,17 @@ environment:
 
 install:
   - choco install gitversion.portable -y
+  - nuget restore
+  - ps: gitversion /l console /output buildserver
+  - ps: . .\restore.ps1
+  - cmd: ECHO nuget pack %nuspec% -version "%GitVersion_NuGetVersion%" -prop "target=%CONFIGURATION%"
+#  - cmd: nuget pack %nuspec% -version "%GitVersion_NuGetVersion%" -prop "target=%CONFIGURATION%"
+#  - cmd: appveyor PushArtifact "%nuget_packageId%.%GitVersion_NuGetVersion%.nupkg"
 
 assembly_info:
   patch: false
 
-before_build:
-  - nuget restore
-  - ps: gitversion /l console /output buildserver
-
-build:
-  - ps: . .\restore.ps1
-
-after_build:
-  - cmd: ECHO nuget pack %nuspec% -version "%GitVersion_NuGetVersion%" -prop "target=%CONFIGURATION%"
-#  - cmd: nuget pack %nuspec% -version "%GitVersion_NuGetVersion%" -prop "target=%CONFIGURATION%"
-#  - cmd: appveyor PushArtifact "%nuget_packageId%.%GitVersion_NuGetVersion%.nupkg"
+build: off
 
 #before_test:
 #  - ps: Import-Module "./packages/pester/tools/pester.psm1"
