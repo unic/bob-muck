@@ -14,7 +14,7 @@ install:
   - ps: gitversion /l console /output buildserver
   - ps: . .\restore.ps1
   - cmd: nuget pack %Nuspec_File% -version "%GitVersion_NuGetVersionV2%" -OutputDirectory %Artefact_Output_Dir%
-  - cmd: appveyor PushArtifact %Artefact_Output_Dir%\%NuGet_PackageId%.%GitVersion_NuGetVersionV2%.nupkg"
+#  - cmd: appveyor PushArtifact %Artefact_Output_Dir%\%NuGet_PackageId%.%GitVersion_NuGetVersionV2%.nupkg"
 
 assembly_info:
   patch: false
@@ -29,4 +29,4 @@ test: off
 #  - ps: Invoke-Pester ./src -OutputFile TestResults.xml -OutputFormat NUnitXml -EnableExit
 
 artifacts:
-  - path: '.\%Artefact_Output_Dir%\*.nupkg'
+  - path: .\%Artefact_Output_Dir%\*.nupkg
