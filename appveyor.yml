@@ -20,10 +20,10 @@ assembly_info:
   patch: false
 
 build: off
-test: off
+#test: off
 
 #before_test:
 #  - ps: Import-Module "./packages/pester/tools/pester.psm1"
 
-#test_script:
-#  - ps: Invoke-Pester ./src -OutputFile TestResults.xml -OutputFormat NUnitXml -EnableExit
+test_script:
+  - ps: .\run-tests.ps1
