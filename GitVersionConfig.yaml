@@ -1,11 +1,3 @@
-mode: ContinuousDeployment
-branches:
-  release[/-]:
-    tag: release
-  hotfix[/-]:
-    tag: hotfix
-    prevent-increment-of-merged-branch-version: true
-  master:    
-    increment: Minor
-  support[/-]:
-    tag: support
+mode: ContinuousDelivery
+continuous-delivery-fallback-tag: unstable
+
