@@ -3,7 +3,7 @@
 $module = "Muck"
 
 Import-Module "$PSScriptRoot\packages\Unic.Bob.Keith\Keith"
-Import-Module "$PSScriptRoot\src\tools\$module" -Force
+Import-Module "$PSScriptRoot\src\build\$module" -Force
 
 New-PsDoc -Module $module -Path "$PSScriptRoot\docs\" -OutputLocation "$PSScriptRoot\docs-generated"
 
