@@ -1,10 +1,12 @@
-# Muck - Local Deployment
+[![build status][1]][2]
+
+[1]: https://ci.appveyor.com/api/projects/status/github/unic/bob-muck?svg=true
+[2]: https://ci.appveyor.com/project/team-unic/bob-muck
+
+# Muck
 
 Muck is the deploy tooling for the local development environment.
 
-### Build
-[![Build](https://teamcity.unic.com/httpAuth/app/rest/builds/buildType:Sitecore_Frameworks_Bob_Muck_Build/statusIcon)](https://teamcity.unic.com/viewType.html?buildTypeId=Sitecore_Frameworks_Bob_Muck_Build)
-
 ## Documentation
 
-<https://teamcity.unic.com/repository/download/Sitecore_Frameworks_Bob_TheBook_BuildTheBook/.lastSuccessful/Muck/README.html>
+See [latest documentation](https://unic.github.io/bob-muck)
