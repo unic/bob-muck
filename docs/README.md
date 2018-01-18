@@ -1,4 +1,5 @@
-<div class="chapterlogo">![Muck](Muck.png)</div>
+<div class="chapterlogo"><img src="./Muck.png"></div>
+
 # Muck
 
 Muck is responsible for deploying a Sitecore Website or a Sitecore Module locally from Visual Studio. Muck provides a NuGet package, which provides MSBuild functionallity to perform the build with web deploy based on the Bob config files. Addionaly to the out-of-the-box web deploy features, Muck adds following steps during local deployment:
