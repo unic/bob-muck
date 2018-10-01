@@ -9,6 +9,13 @@
           MuckRecyleAppPool;
         </BuildDependsOn>
 
+		<BuildDependsOn Condition="'$(BuildingInsideVisualStudio)' == 'True' And '$(MuckProjectType)' == 'AutomationEngine'">
+          $(BuildDependsOn);
+          MuckLoadSettings;
+          WebFileSystemPublish;
+          MuckMoveMaeBinaries;
+        </BuildDependsOn>
+
 		<BuildDependsOn Condition="'$(BuildingInsideVisualStudio)' == 'True' And '$(MuckProjectType)' == 'DotNetCore'">
           $(BuildDependsOn);
           MuckLoadSettings;
@@ -25,6 +32,9 @@
         </GetBobSetting>
         <GetBobSetting Key="WebRoot" ProjectPath="$(MSBuildProjectDirectory)"  ModuleDirectory="$(MSBuildThisFileDirectory)">
             <Output TaskParameter="Value" PropertyName="WebRoot" />
+        </GetBobSetting>
+        <GetBobSetting Key="AutomationEngineRoot" ProjectPath="$(MSBuildProjectDirectory)"  ModuleDirectory="$(MSBuildThisFileDirectory)">
+            <Output TaskParameter="Value" PropertyName="AutomationEngineRoot" />
         </GetBobSetting>
         <GetBobSetting Key="ActiveRole" ProjectPath="$(MSBuildProjectDirectory)"  ModuleDirectory="$(MSBuildThisFileDirectory)">
             <Output TaskParameter="Value" PropertyName="MuckRole" />
@@ -50,6 +60,7 @@
 
         <PropertyGroup>
             <publishUrl>$(WebRoot)</publishUrl>
+            <publishUrl Condition="'$(MuckProjectType)' == 'AutomationEngine'">$(AutomationEngineRoot)</publishUrl>
             <MuckBaseWebConfigIdentifier>base</MuckBaseWebConfigIdentifier>
         </PropertyGroup>
         <ItemGroup>
@@ -87,5 +98,13 @@
 
     <Target Name="MuckRecyleAppPool" Condition="'$(MuckRecyleAppPool)' == 'true' And '$(WebsiteCodeName)' != ''">
          <MSBuild.ExtensionPack.Web.Iis7AppPool TaskAction="Recycle" Name="$(WebsiteCodeName)" />
+    </Target>
+
+    <Target Name="MuckMoveMaeBinaries" Condition="'$(AutomationEngineRoot)' != ''">
+        <ItemGroup>
+            <MuckMaeBinaries Include="$(AutomationEngineRoot)\bin\*"/>
+        </ItemGroup>
+        <Move SourceFiles="@(MuckMaeBinaries)" DestinationFolder="$(AutomationEngineRoot)" />
+        <RemoveDir Directories="$(AutomationEngineRoot)\bin" />  
     </Target>
 </Project>
