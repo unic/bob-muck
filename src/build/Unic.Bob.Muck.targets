@@ -9,11 +9,17 @@
           MuckRecyleAppPool;
         </BuildDependsOn>
 
-		<BuildDependsOn Condition="'$(BuildingInsideVisualStudio)' == 'True' And '$(MuckProjectType)' == 'AutomationEngine'">
+		<BuildDependsOn Condition="'$(BuildingInsideVisualStudio)' == 'True' And ('$(MuckProjectType)' == 'AutomationEngine' Or '$(MuckProjectType)' == 'IndexWorker')">
           $(BuildDependsOn);
           MuckLoadSettings;
           WebFileSystemPublish;
-          MuckMoveMaeBinaries;
+          MuckMoveBinaries;
+        </BuildDependsOn>
+
+		<BuildDependsOn Condition="'$(BuildingInsideVisualStudio)' == 'True' And '$(MuckProjectType)' == 'XConnect'">
+          $(BuildDependsOn);
+          MuckLoadSettings;
+          WebFileSystemPublish;
         </BuildDependsOn>
 
 		<BuildDependsOn Condition="'$(BuildingInsideVisualStudio)' == 'True' And '$(MuckProjectType)' == 'DotNetCore'">
@@ -35,6 +41,12 @@
         </GetBobSetting>
         <GetBobSetting Key="AutomationEngineRoot" ProjectPath="$(MSBuildProjectDirectory)"  ModuleDirectory="$(MSBuildThisFileDirectory)">
             <Output TaskParameter="Value" PropertyName="AutomationEngineRoot" />
+        </GetBobSetting>
+        <GetBobSetting Key="XConnectRoot" ProjectPath="$(MSBuildProjectDirectory)"  ModuleDirectory="$(MSBuildThisFileDirectory)">
+            <Output TaskParameter="Value" PropertyName="XConnectRoot" />
+        </GetBobSetting>
+        <GetBobSetting Key="IndexWorkerRoot" ProjectPath="$(MSBuildProjectDirectory)"  ModuleDirectory="$(MSBuildThisFileDirectory)">
+            <Output TaskParameter="Value" PropertyName="IndexWorkerRoot" />
         </GetBobSetting>
         <GetBobSetting Key="ActiveRole" ProjectPath="$(MSBuildProjectDirectory)"  ModuleDirectory="$(MSBuildThisFileDirectory)">
             <Output TaskParameter="Value" PropertyName="MuckRole" />
@@ -61,6 +73,8 @@
         <PropertyGroup>
             <publishUrl>$(WebRoot)</publishUrl>
             <publishUrl Condition="'$(MuckProjectType)' == 'AutomationEngine'">$(AutomationEngineRoot)</publishUrl>
+            <publishUrl Condition="'$(MuckProjectType)' == 'XConnect'">$(XConnectRoot)</publishUrl>
+            <publishUrl Condition="'$(MuckProjectType)' == 'IndexWorker'">$(IndexWorkerRoot)</publishUrl>
             <MuckBaseWebConfigIdentifier>base</MuckBaseWebConfigIdentifier>
         </PropertyGroup>
         <ItemGroup>
@@ -100,11 +114,11 @@
          <MSBuild.ExtensionPack.Web.Iis7AppPool TaskAction="Recycle" Name="$(WebsiteCodeName)" />
     </Target>
 
-    <Target Name="MuckMoveMaeBinaries" Condition="'$(AutomationEngineRoot)' != ''">
+    <Target Name="MuckMoveBinaries" Condition="'$(publishUrl)' != ''">
         <ItemGroup>
-            <MuckMaeBinaries Include="$(AutomationEngineRoot)\bin\*"/>
+            <MuckBinariesToMove Include="$(publishUrl)\bin\*"/>
         </ItemGroup>
-        <Move SourceFiles="@(MuckMaeBinaries)" DestinationFolder="$(AutomationEngineRoot)" />
-        <RemoveDir Directories="$(AutomationEngineRoot)\bin" />  
+        <Move SourceFiles="@(MuckBinariesToMove)" DestinationFolder="$(publishUrl)" />
+        <RemoveDir Directories="$(publishUrl)\bin" />  
     </Target>
 </Project>
