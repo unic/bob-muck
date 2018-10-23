@@ -20,6 +20,7 @@
           $(BuildDependsOn);
           MuckLoadSettings;
           WebFileSystemPublish;
+          MuckRecyleAppPool;
         </BuildDependsOn>
 
 		<BuildDependsOn Condition="'$(BuildingInsideVisualStudio)' == 'True' And '$(MuckProjectType)' == 'DotNetCore'">
@@ -34,6 +35,9 @@
     </ItemGroup>
     <Target Name="MuckLoadSettings">
         <GetBobSetting Key="WebsiteCodeName" ProjectPath="$(MSBuildProjectDirectory)"  ModuleDirectory="$(MSBuildThisFileDirectory)">
+            <Output TaskParameter="Value" PropertyName="WebsiteCodeName" />
+        </GetBobSetting>
+        <GetBobSetting Key="XConnectWebsiteCodename" Condition="'$(MuckProjectType)' == 'XConnect'" ProjectPath="$(MSBuildProjectDirectory)"  ModuleDirectory="$(MSBuildThisFileDirectory)">
             <Output TaskParameter="Value" PropertyName="WebsiteCodeName" />
         </GetBobSetting>
         <GetBobSetting Key="WebRoot" ProjectPath="$(MSBuildProjectDirectory)"  ModuleDirectory="$(MSBuildThisFileDirectory)">
@@ -58,6 +62,9 @@
             <Output TaskParameter="Value" PropertyName="MuckKeepAppConfigIncludes" />
         </GetBobSetting>
         <GetBobSetting Key="MuckRecyleAppPool" ProjectPath="$(MSBuildProjectDirectory)"  ModuleDirectory="$(MSBuildThisFileDirectory)">
+            <Output TaskParameter="Value" PropertyName="MuckRecyleAppPool" />
+        </GetBobSetting>
+        <GetBobSetting Key="MuckRecyleXConnectAppPool" Condition="'$(MuckProjectType)' == 'XConnect'" ProjectPath="$(MSBuildProjectDirectory)"  ModuleDirectory="$(MSBuildThisFileDirectory)">
             <Output TaskParameter="Value" PropertyName="MuckRecyleAppPool" />
         </GetBobSetting>
         
