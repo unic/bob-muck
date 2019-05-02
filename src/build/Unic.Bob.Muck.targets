@@ -12,8 +12,10 @@
 		<BuildDependsOn Condition="'$(BuildingInsideVisualStudio)' == 'True' And ('$(MuckProjectType)' == 'AutomationEngine' Or '$(MuckProjectType)' == 'IndexWorker')">
           $(BuildDependsOn);
           MuckLoadSettings;
+          MuckStopService;    
           WebFileSystemPublish;
           MuckMoveBinaries;
+          MuckStartService;   
         </BuildDependsOn>
 
 		<BuildDependsOn Condition="'$(BuildingInsideVisualStudio)' == 'True' And '$(MuckProjectType)' == 'XConnect'">
@@ -39,6 +41,12 @@
         </GetBobSetting>
         <GetBobSetting Key="XConnectWebsiteCodename" Condition="'$(MuckProjectType)' == 'XConnect'" ProjectPath="$(MSBuildProjectDirectory)"  ModuleDirectory="$(MSBuildThisFileDirectory)">
             <Output TaskParameter="Value" PropertyName="WebsiteCodeName" />
+        </GetBobSetting>
+        <GetBobSetting Key="AutomationEngineServiceName" Condition="'$(MuckProjectType)' == 'AutomationEngine'" ProjectPath="$(MSBuildProjectDirectory)"  ModuleDirectory="$(MSBuildThisFileDirectory)">
+            <Output TaskParameter="Value" PropertyName="ServiceCodeName" />
+        </GetBobSetting>
+        <GetBobSetting Key="IndexWorkerServiceName" Condition="'$(MuckProjectType)' == 'IndexWorker'" ProjectPath="$(MSBuildProjectDirectory)"  ModuleDirectory="$(MSBuildThisFileDirectory)">
+            <Output TaskParameter="Value" PropertyName="ServiceCodeName" />
         </GetBobSetting>
         <GetBobSetting Key="WebRoot" ProjectPath="$(MSBuildProjectDirectory)"  ModuleDirectory="$(MSBuildThisFileDirectory)">
             <Output TaskParameter="Value" PropertyName="WebRoot" />
@@ -119,6 +127,13 @@
 
     <Target Name="MuckRecyleAppPool" Condition="'$(MuckRecyleAppPool)' == 'true' And '$(WebsiteCodeName)' != ''">
          <MSBuild.ExtensionPack.Web.Iis7AppPool TaskAction="Recycle" Name="$(WebsiteCodeName)" />
+    </Target>
+
+    <Target Name="MuckStopService" Condition="'$(ServiceCodeName)' != ''">
+         <RestartXConnectService ActionType="Stop" ServiceName="$(ServiceCodeName)" />
+    </Target>
+    <Target Name="MuckStartService" Condition="'$(ServiceCodeName)' != ''">
+         <RestartXConnectService ActionType="Start" ServiceName="$(ServiceCodeName)" />
     </Target>
 
     <Target Name="MuckMoveBinaries" Condition="'$(publishUrl)' != ''">
