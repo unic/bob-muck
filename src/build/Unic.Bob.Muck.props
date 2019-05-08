@@ -77,6 +77,20 @@
    			]]>
 		</Task>
 	</UsingTask>
+	<UsingTask AssemblyFile="$(PowerShellTaskFactoryAssemblyFile)" TaskFactory="PowershellTaskFactory" TaskName="RestartXConnectService">
+		<ParameterGroup>
+			<ServiceName ParameterType="System.String" Required="true"/>
+			<ActionType ParameterType="System.String" Required="true"/>
+		</ParameterGroup>
+		<Task>
+			<![CDATA[
+				switch ($ActionType) {
+					"Stop" { Get-Service -Name $ServiceName | Stop-Service }
+					"Start" { Get-Service -Name $ServiceName | Start-Service }
+				}
+			]]>
+		</Task>
+	</UsingTask>
 
 	<!-- Web Deploy Properties-->
 	<PropertyGroup>
