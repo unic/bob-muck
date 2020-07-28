@@ -19,8 +19,8 @@ After the package is installed, a deployment will be done on each build started 
 
 | Key | Description | Example | Default |
 | --- | --- | --- | --- |
-| ActiveRole |	The role which Muck will deploy to. This is used for Web.config transform and for cleaning up the "Include" folder.	| `<MuckRole>delivery</MuckRole>` |  |
-| ActiveEnvironment |	The environment which Muck will deploy to. This is used for Web.config transform and for cleaning up the "Include" folder.	| `<MuckEnvironment>local</MuckEnvironment>` |  |
+| ActiveRole |	The role which Muck will deploy to. This is used for Web.config transform and for cleaning up the "Include" folder.	| `<ActiveRole>delivery</ActiveRole>` |  |
+| ActiveEnvironment |	The environment which Muck will deploy to. This is used for Web.config transform and for cleaning up the "Include" folder.	| `<ActiveEnvironment>local</ActiveEnvironment>` |  |
 | WebFolderName |	The name of the folder inside [GlobalWebPath]\[WebsiteCodeName] which contains the WebRoot	| `<WebFolderName>Web</WebFolderName>` |  |
 | WebsiteCodeName |	The name of IIS site and application pool. | `<WebsiteCodeName>post-internet</WebsiteCodeName>` |  |
 | GlobalWebPath |	Path to the folder where all sites are located |	`<GlobalWebPath>D:\Web</GlobalWebPath>`	 |  |
