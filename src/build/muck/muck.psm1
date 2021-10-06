@@ -14,5 +14,5 @@ function ResolvePath() {
 Import-Module (ResolvePath "Unic.Bob.Rubble" "tools\Rubble")
 Import-Module (ResolvePath "Unic.Bob.Wendy" "tools\Wendy")
 
-Get-ChildItem -Path $PSScriptRoot\*.ps1 -Exclude *.Tests.ps1 | Foreach-Object{ . $_.FullName }
+Get-ChildItem -Path $PSScriptRoot\*.ps1 -Exclude *.Tests.ps1 | Foreach-Object{ . ([scriptblock]::Create([io.file]::ReadAllText($_.FullName))) }
 Export-ModuleMember -Function * -Alias *
